@@ -209,6 +209,21 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
   nav a:focus-visible{opacity:1;color:var(--green)}
 }
 
+/* ── Desktop: full-bleed top bar ── */
+@media (min-width:1081px){
+  /* Break the bar out of the centered wrap so it spans the whole viewport,
+     then re-inset its contents. 50% - 50vw always equals the wrap's side
+     inset, so this lands flush on both edges at any width. */
+  nav{
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+    padding-left:max(24px,env(safe-area-inset-left));
+    padding-right:max(24px,env(safe-area-inset-right));
+  }
+  /* Logo stays far left; push the links to the far right edge. */
+  nav .nav-links{margin-left:auto}
+}
+
 @media (max-width:1080px){
   /* --nav-h = visible bar height below the notch. The fixed bar also covers
      the safe-area (notch) strip itself, so nothing bleeds through the top. */
