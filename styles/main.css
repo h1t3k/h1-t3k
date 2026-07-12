@@ -250,14 +250,12 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
     min-height:calc(env(safe-area-inset-top) + var(--nav-h));
     padding:env(safe-area-inset-top) max(16px,env(safe-area-inset-right))
       0 max(16px,env(safe-area-inset-left));
-    /* Scrim: the notch strip stays fully opaque (it can't take effects — the
-       status bar sits behind it), then the fade happens entirely within the
-       bar cell, from opaque at its top to strongly transparent at its bottom.
-       Because the fade is confined to the bar cell (env inset → 100%), the bar
-       looks identical on notched and non-notched phones. */
+    /* One continuous fade across the whole bar, easing up through the notch
+       strip too — no hard stop where the notch meets the bar. Near-opaque at
+       the very top (keeps the status-bar area clean) down to strongly
+       transparent at the bottom. */
     background:linear-gradient(to bottom,
       rgba(13,15,11,0.98) 0,
-      rgba(13,15,11,0.98) env(safe-area-inset-top,0px),
       rgba(13,15,11,0.12) 100%);
     border-bottom:1px solid var(--border);
     -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
