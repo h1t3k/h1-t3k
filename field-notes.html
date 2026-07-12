@@ -195,6 +195,222 @@
 
   <div class="wrap grid">
     <nav aria-label="Primary">
+      <span class="site-mono" role="img" aria-label="h1-t3k">ht</span>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+        <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
+      </button>
+      <div class="nav-links" id="site-menu">
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="security-lab.html">Security Lab</a>
+        <a href="field-notes.html" aria-current="page">Field Notes</a>
+        <a href="design-archive.html">Design Archive</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <header class="page-intro">
+      <p class="eyebrow">Research · operations · field evidence</p>
+      <h1>Field<br>Notes</h1>
+      <p>Working notes on security, deployment, tools, economic reality, and the decisions that shape an evolving technical practice.</p>
+    </header>
+
+    <section class="notice" style="grid-column:auto;">
+      // field notes &amp; operations
+    </section>
+
+    <section class="fullrow">
+      <div class="sys-line"><span class="prompt"></span>ls -t posts/</div>
+      <ul class="post-list">
+
+        <!-- Skip the Interview — referral-supported field guide; published -->
+        <li>
+          <a class="post-item" href="skip-the-interview.html">
+            <div class="post-meta">field guide · work · plasma · rides · invest · 2026</div>
+            <h3>Skip the Interview. Start Earning.</h3>
+            <p>No resume, no interview — paid event and dog-walking work, plasma donation, ride discounts, and crypto/stock signup bonuses, each with a real referral link you can use today.</p>
+            <span class="tag">Referral-supported</span>
+          </a>
+        </li>
+
+      </ul>
+    </section>
+
+    <section class="fullrow">
+      <div class="disclaimer">
+        <strong>Disclosure:</strong> Some posts include referral or signup links. When used, they help support the project at no extra cost to the reader. I only include tools or services that are relevant to the build, deployment, or research process.
+      </div>
+    </section>
+
+    <footer class="center small fullrow">
+      <p>© 2026 k.b.r.<br><span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">visits: …</span></p>
+    </footer>
+
+  </div>
+  <script defer src="assets/js/init.js"></script>
+</body>
+</html>
+      // Get subdomain components
+      let gateway = window.location.hostname.split('.').slice(-2).join('.') + (window.location.port ? ':' + window.location.port : '');
+      let subDomains = []
+      // Is the contract an ethereum address?
+      if(/^0x[0-9a-fA-F]{40}$/.test(urlMainParts.hostname)) {
+        subDomains.push(urlMainParts.hostname)
+        if(urlMainParts.chainId !== undefined) {
+          subDomains.push(urlMainParts.chainId)
+        }
+        else {
+          subDomains.push(1);
+        }
+      }
+      // It is a domain name
+      else {
+        if(urlMainParts.hostname.endsWith('.eth') && urlMainParts.chainId === undefined) {
+          subDomains.push(urlMainParts.hostname)
+          subDomains.push(1)
+        }
+        else {
+          subDomains.push(urlMainParts.hostname)
+          if(urlMainParts.chainId !== undefined) {
+            subDomains.push(urlMainParts.chainId)
+          }
+        }
+      }
+  
+      let gatewayUrl = window.location.protocol + "//" + subDomains.join(".") + "." + gateway + (urlMainParts.path ?? "")
+      return gatewayUrl;
+    }
+
+
+    // Wrap the fetch() function to convert web3:// URLs into gateway URLs
+    const originalFetch = fetch;
+    fetch = function(input, init) {
+      // Process absolute web3:// URLS: convert them into gateway HTTP URLs
+      if (typeof input === 'string' && input.startsWith('web3://')) {
+        const convertedUrl = convertWeb3UrlToGatewayUrl(input);
+        if(convertedUrl == null) {
+          console.error("Gateway fetch() wrapper: Unable to convert web3:// URL: " + input);
+          return;
+        }
+        console.log('Gateway fetch() wrapper: Converted ' + input + ' to ' + convertedUrl);
+        input = convertedUrl;
+      }
+
+      // Pipe through the original fetch function
+      return originalFetch(input, init);
+    };
+
+
+    // Listen for clicks on <a> tags, and convert web3:// URLs into gateway URLs
+    document.addEventListener('click', function(event) {
+      const closestATag = event.target.closest('a');
+      if(closestATag && closestATag.href.startsWith('web3://')) {
+        event.preventDefault();
+        const targetUrl = closestATag.href;
+        const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
+        if(convertedUrl == null) {
+          console.error("Gateway A tag click wrapper: Unable to convert web3:// URL: " + targetUrl);
+          return;
+        }
+        console.log('Gateway A tag click wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
+        // If the A tag has a target="_blank" attribute, open the URL in a new tab
+        if(closestATag.target === '_blank') {
+          window.open(convertedUrl, '_blank');
+        }
+        else {
+          window.location.href = convertedUrl;
+        }
+      }
+    });
+
+
+    // All tags with a attribute that can get an URL: override the setting of the attribute to convert web3:// URLs into gateway URLs
+    const elementsWithUrlAttr = [
+      {tagName: 'a', attrName: 'href'}, // <a>
+      {tagName: 'link', attrName: 'href'}, // <link>
+      {tagName: 'area', attrName: 'href'}, // <area>
+      {tagName: 'img', attrName: 'src'}, // <img>
+      {tagName: 'script', attrName: 'src'}, // <script>
+      {tagName: 'iframe', attrName: 'src'}, // <iframe>
+      // {tagName: 'audio', attr: 'src'}, // <audio>
+      // {tagName: 'video', attr: 'src'}, // <video>
+      {tagName: 'source', attrName: 'src'}, // <source>
+      {tagName: 'embed', attrName: 'src'}, // <embed>
+      {tagName: 'input', attrName: 'src'}, // <input type="image">
+      {tagName: 'object', attrName: 'data'}, // <object>
+      {tagName: 'image', attrName: 'href'}, // <image> of SVG
+    ];
+    // Override the setter of the attribute to convert web3:// URLs into gateway URLs
+    elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
+      const element = document.createElement(elementWithUrlAttr.tagName);
+      const proto = element.constructor.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(proto, elementWithUrlAttr.attrName);
+      if (!descriptor || typeof descriptor.set !== 'function') {
+        // Skip if no setter (e.g., SVG <image> 'href')
+        return;
+      }
+      Object.defineProperty(proto, elementWithUrlAttr.attrName, {
+        set: function(attrValue) {
+          if(attrValue && typeof attrValue === 'string' && attrValue.startsWith('web3://')) {
+            const convertedUrl = convertWeb3UrlToGatewayUrl(attrValue);
+            if(convertedUrl == null) {
+              console.error("Gateway " + element.name + " " + elementWithUrlAttr.attrName + " setter wrapper: Unable to convert web3:// URL: " + attrValue);
+              descriptor.set.call(this, attrValue);
+              return;
+            }
+            console.log('Gateway ' + element.name + ' ' + elementWithUrlAttr.attrName + ' setter wrapper: Converted ' + attrValue + ' to ' + convertedUrl);
+            descriptor.set.call(this, convertedUrl);
+          }
+          else {
+            descriptor.set.call(this, attrValue);
+          }
+        }
+      });
+    });
+    // Added nodes to the DOM : convert web3:// URLs into gateway URLs
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        // Insertion of nodes with the src attribute (img, iframe, audio, ...)
+        if(mutation.type === 'childList') {
+          mutation.addedNodes.forEach(function(addedNode) {
+            // Ignore non-element nodes
+            if(addedNode.nodeType != 1) {
+              return;
+            }
+            // Find all nodes that have a web3:// URL in their attribute as defined in elementsWithUrlAttr
+            elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
+              const nodes = [...addedNode.querySelectorAll(elementWithUrlAttr.tagName + '[' + elementWithUrlAttr.attrName + '^="web3://"]')];
+              // Check if the addedNode itself matches the tag and has the attribute starting with web3://
+              if (
+                addedNode.tagName === elementWithUrlAttr.tagName.toUpperCase() &&
+                typeof addedNode.getAttribute === 'function' &&
+                typeof addedNode.getAttribute(elementWithUrlAttr.attrName) === 'string' &&
+                addedNode.getAttribute(elementWithUrlAttr.attrName).startsWith('web3://')
+              ) {
+                nodes.push(addedNode);
+              }
+              nodes.forEach(function(node) {
+                const targetUrl = node.getAttribute(elementWithUrlAttr.attrName);
+                const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
+                if(convertedUrl == null) {
+                  console.error("Gateway " + node.tagName + " injection wrapper: Unable to convert web3:// URL: " + targetUrl);
+                  return;
+                }
+                console.log('Gateway ' + node.tagName + ' injection wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
+                node.setAttribute(elementWithUrlAttr.attrName, convertedUrl);
+              });
+            });
+          });
+        }
+      });
+    });
+    observer.observe(document.querySelector("body"), {childList: true, subtree: true});
+
+  })();
+</script>
+
+  <div class="wrap grid">
+    <nav aria-label="Primary">
       <img id="site-icon" alt="icon">
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
         <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
