@@ -216,7 +216,7 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
   nav a:focus-visible{opacity:1;color:var(--green)}
 }
 
-/* ── Desktop: full-bleed top bar ── */
+/* ── Desktop: full-bleed sticky frosted top bar ── */
 @media (min-width:1081px){
   /* Break the bar out of the centered wrap so it spans the whole viewport,
      then re-inset its contents. 50% - 50vw always equals the wrap's side
@@ -231,6 +231,17 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
      while the last link (Contact) is pushed to the far right edge. */
   nav .nav-links{flex:1 1 auto}
   nav .nav-links a:last-child{margin-left:auto}
+  /* Sticky so page content scrolls behind the frosted-glass fade — same
+     treatment as the mobile bar: opaque at the top easing to transparent at
+     the bottom, over a backdrop blur. */
+  body.nav-enhanced>.wrap{z-index:auto}
+  body.nav-enhanced nav{
+    position:sticky;top:0;z-index:1001;
+    background:linear-gradient(to bottom,
+      rgba(13,15,11,0.98) 0,
+      rgba(13,15,11,0.12) 100%);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  }
 }
 
 @media (max-width:1080px){
