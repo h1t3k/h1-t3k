@@ -210,14 +210,23 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
 }
 
 @media (max-width:1080px){
-  /* Nav paints the top safe-area strip itself, so drop it from the wrap. */
-  body.nav-enhanced>.wrap{z-index:auto;padding-top:0}
+  /* --nav-h = visible bar height below the notch. The fixed bar also covers
+     the safe-area (notch) strip itself, so nothing bleeds through the top. */
+  :root{--nav-h:52px}
+  /* Bar is position:fixed (like SoundCloud): always pinned to the viewport
+     top, so the Menu/Close toggle stays reachable no matter the scroll. The
+     wrap reserves space for it instead of the browser painting content under. */
+  body.nav-enhanced>.wrap{
+    z-index:auto;
+    padding-top:calc(env(safe-area-inset-top) + var(--nav-h) + 10px);
+  }
   body.nav-enhanced nav{
-    position:sticky;top:0;z-index:1001;min-height:64px;
-    /* Fully opaque bar that also covers the notch / safe-area strip, so the
-       hero heading scrolls cleanly behind it with no bleed-through. */
-    padding-top:max(16px,env(safe-area-inset-top));
-    background:var(--bg);
+    position:fixed;top:0;left:0;right:0;z-index:1001;
+    box-sizing:border-box;margin:0;gap:16px;align-items:center;
+    min-height:calc(env(safe-area-inset-top) + var(--nav-h));
+    padding:env(safe-area-inset-top) max(16px,env(safe-area-inset-right))
+      0 max(16px,env(safe-area-inset-left));
+    background:var(--bg);border-bottom:1px solid var(--border);
     -webkit-backdrop-filter:none;backdrop-filter:none;
     transform:none !important;
     animation:none !important;opacity:1 !important;
@@ -227,7 +236,7 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
   body.nav-enhanced>.nav-links[data-mobile-menu]{
     position:fixed;inset:0;z-index:1000;min-height:100vh;min-height:100dvh;max-width:none;
     display:flex;flex-flow:column nowrap;align-items:flex-start;justify-content:flex-start;gap:0;
-    padding:max(112px,calc(env(safe-area-inset-top) + 96px)) max(24px,env(safe-area-inset-right))
+    padding:calc(env(safe-area-inset-top) + var(--nav-h) + 26px) max(24px,env(safe-area-inset-right))
       max(32px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));
     background-color:var(--bg2);background-image:var(--scanline);
     overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
