@@ -195,6 +195,13 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
   font-family:var(--font-mono);font-size:1rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
   min-width:44px;min-height:44px;align-items:center;justify-content:flex-end;gap:10px;cursor:pointer;
 }
+/* Icon-only toggle: hide the "Menu"/"Close" text but keep it as the
+   button's accessible name for screen readers. */
+.nav-toggle [data-menu-label]{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);
+  white-space:nowrap;border:0;
+}
 .nav-toggle-mark{display:grid;gap:4px;width:20px}
 .nav-toggle-mark::before,.nav-toggle-mark::after{
   content:'';display:block;width:20px;height:1px;background:currentColor;
@@ -220,8 +227,10 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
     padding-left:max(24px,env(safe-area-inset-left));
     padding-right:max(24px,env(safe-area-inset-right));
   }
-  /* Logo stays far left; push the links to the far right edge. */
-  nav .nav-links{margin-left:auto}
+  /* Links fill the bar: the first group hugs the logo on the left,
+     while the last link (Contact) is pushed to the far right edge. */
+  nav .nav-links{flex:1 1 auto}
+  nav .nav-links a:last-child{margin-left:auto}
 }
 
 @media (max-width:1080px){
