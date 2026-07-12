@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Keaton Raser — Data, Security &amp; Creative Technology</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A hybrid portfolio spanning data-minded analysis, security, automation, visual systems, and creative technology by Keaton Raser in Los Angeles.">
+<link rel="canonical" href="https://h1-t3k.design/">
+<meta property="og:title" content="Keaton Raser — Data, Security &amp; Creative Technology">
+<meta property="og:description" content="Design-led technical work across data, security, automation, and creative systems.">
+<meta property="og:type" content="website">
+<!-- FLASH-FREE GATE — must stay inline, in <head>, before any CSS.
+     Runs synchronously so content is hidden before first paint
+     only when the boot will actually play. -->
+<script>
+(function () {
+  try {
+    var seen    = sessionStorage.getItem('ht_boot_v1');
+    var reduced = window.matchMedia &&
+                  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!seen) {
+      document.documentElement.classList.add(reduced ? 'booting-rm' : 'booting');
+      sessionStorage.setItem('ht_boot_v1', '1'); /* set at start: a mid-boot
+        reload does not replay. Swap to set-on-complete if replay is wanted. */
+    }
+  } catch (e) { /* storage unavailable → no boot, content shows normally */ }
+})();
+</script>
+<link rel="stylesheet" href="styles/main.css">
+</head>
+<body><script>
+  /** 
+   * Patch by web3url-gateway : Convert web3:// URLs into gateway URLs in various places
+   */
+  (function() {
+
+    // Web3:// URL to Gateway URL convertor
+    const convertWeb3UrlToGatewayUrl = function(web3Url) {
+      // Parse the URL
+      let matchResult = web3Url.match(/^(?<protocol>[^:]+):\/\/(?<hostname>[^:/?]+)(:(?<chainId>[1-9][0-9]*))?(?<path>.*)?$/)
+      if(matchResult == null) {
+        // Invalid web3:// URL
+        return null;
+      }
+      let urlMainParts = matchResult.groups
+  
+      // Check protocol name
+      if(["web3", "w3"].includes(urlMainParts.protocol) == false) {
+        // Bad protocol name"
+        return null;
+      }
+  
+      // Get subdomain components
+      let gateway = window.location.hostname.split('.').slice(-2).join('.') + (window.location.port ? ':' + window.location.port : '');
+      let subDomains = []
+      // Is the contract an ethereum address?
+      if(/^0x[0-9a-fA-F]{40}$/.test(urlMainParts.hostname)) {
+        subDomains.push(urlMainParts.hostname)
+        if(urlMainParts.chainId !== undefined) {
+          subDomains.push(urlMainParts.chainId)
+        }
+        else {
+          subDomains.push(1);
+        }
+      }
+      // It is a domain name
+      else {
+        if(urlMainParts.hostname.endsWith('.eth') && urlMainParts.chainId === undefined) {
+          subDomains.push(urlMainParts.hostname)
+          subDomains.push(1)
+        }
+        else {
+          subDomains.push(urlMainParts.hostname)
+          if(urlMainParts.chainId !== undefined) {
+            subDomains.push(urlMainParts.chainId)
+          }
+        }
+      }
+  
+      let gatewayUrl = window.location.protocol + "//" + subDomains.join(".") + "." + gateway + (urlMainParts.path ?? "")
+      return gatewayUrl;
+    }
+
+
+    // Wrap the fetch() function to convert web3:// URLs into gateway URLs
+    const originalFetch = fetch;
+    fetch = function(input, init) {
+      // Process absolute web3:// URLS: convert them into gateway HTTP URLs
+      if (typeof input === 'string' && input.startsWith('web3://')) {
+        const convertedUrl = convertWeb3UrlToGatewayUrl(input);
+        if(convertedUrl == null) {
+          console.error("Gateway fetch() wrapper: Unable to convert web3:// URL: " + input);
+          return;
+        }
+        console.log('Gateway fetch() wrapper: Converted ' + input + ' to ' + convertedUrl);
+        input = convertedUrl;
+      }
+
+      // Pipe through the original fetch function
+      return originalFetch(input, init);
+    };
+
+
+    // Listen for clicks on <a> tags, and convert web3:// URLs into gateway URLs
+    document.addEventListener('click', function(event) {
+      const closestATag = event.target.closest('a');
+      if(closestATag && closestATag.href.startsWith('web3://')) {
+        event.preventDefault();
+        const targetUrl = closestATag.href;
+        const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
+        if(convertedUrl == null) {
+          console.error("Gateway A tag click wrapper: Unable to convert web3:// URL: " + targetUrl);
+          return;
+        }
+        console.log('Gateway A tag click wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
+        // If the A tag has a target="_blank" attribute, open the URL in a new tab
+        if(closestATag.target === '_blank') {
+          window.open(convertedUrl, '_blank');
+        }
+        else {
+          window.location.href = convertedUrl;
+        }
+      }
+    });
+
+
+    // All tags with a attribute that can get an URL: override the setting of the attribute to convert web3:// URLs into gateway URLs
+    const elementsWithUrlAttr = [
+      {tagName: 'a', attrName: 'href'}, // <a>
+      {tagName: 'link', attrName: 'href'}, // <link>
+      {tagName: 'area', attrName: 'href'}, // <area>
+      {tagName: 'img', attrName: 'src'}, // <img>
+      {tagName: 'script', attrName: 'src'}, // <script>
+      {tagName: 'iframe', attrName: 'src'}, // <iframe>
+      // {tagName: 'audio', attr: 'src'}, // <audio>
+      // {tagName: 'video', attr: 'src'}, // <video>
+      {tagName: 'source', attrName: 'src'}, // <source>
+      {tagName: 'embed', attrName: 'src'}, // <embed>
+      {tagName: 'input', attrName: 'src'}, // <input type="image">
+      {tagName: 'object', attrName: 'data'}, // <object>
+      {tagName: 'image', attrName: 'href'}, // <image> of SVG
+    ];
+    // Override the setter of the attribute to convert web3:// URLs into gateway URLs
+    elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
+      const element = document.createElement(elementWithUrlAttr.tagName);
+      const proto = element.constructor.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(proto, elementWithUrlAttr.attrName);
+      if (!descriptor || typeof descriptor.set !== 'function') {
+        // Skip if no setter (e.g., SVG <image> 'href')
+        return;
+      }
+      Object.defineProperty(proto, elementWithUrlAttr.attrName, {
+        set: function(attrValue) {
+          if(attrValue && typeof attrValue === 'string' && attrValue.startsWith('web3://')) {
+            const convertedUrl = convertWeb3UrlToGatewayUrl(attrValue);
+            if(convertedUrl == null) {
+              console.error("Gateway " + element.name + " " + elementWithUrlAttr.attrName + " setter wrapper: Unable to convert web3:// URL: " + attrValue);
+              descriptor.set.call(this, attrValue);
+              return;
+            }
+            console.log('Gateway ' + element.name + ' ' + elementWithUrlAttr.attrName + ' setter wrapper: Converted ' + attrValue + ' to ' + convertedUrl);
+            descriptor.set.call(this, convertedUrl);
+          }
+          else {
+            descriptor.set.call(this, attrValue);
+          }
+        }
+      });
+    });
+    // Added nodes to the DOM : convert web3:// URLs into gateway URLs
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        // Insertion of nodes with the src attribute (img, iframe, audio, ...)
+        if(mutation.type === 'childList') {
+          mutation.addedNodes.forEach(function(addedNode) {
+            // Ignore non-element nodes
+            if(addedNode.nodeType != 1) {
+              return;
+            }
+            // Find all nodes that have a web3:// URL in their attribute as defined in elementsWithUrlAttr
+            elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
+              const nodes = [...addedNode.querySelectorAll(elementWithUrlAttr.tagName + '[' + elementWithUrlAttr.attrName + '^="web3://"]')];
+              // Check if the addedNode itself matches the tag and has the attribute starting with web3://
+              if (
+                addedNode.tagName === elementWithUrlAttr.tagName.toUpperCase() &&
+                typeof addedNode.getAttribute === 'function' &&
+                typeof addedNode.getAttribute(elementWithUrlAttr.attrName) === 'string' &&
+                addedNode.getAttribute(elementWithUrlAttr.attrName).startsWith('web3://')
+              ) {
+                nodes.push(addedNode);
+              }
+              nodes.forEach(function(node) {
+                const targetUrl = node.getAttribute(elementWithUrlAttr.attrName);
+                const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
+                if(convertedUrl == null) {
+                  console.error("Gateway " + node.tagName + " injection wrapper: Unable to convert web3:// URL: " + targetUrl);
+                  return;
+                }
+                console.log('Gateway ' + node.tagName + ' injection wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
+                node.setAttribute(elementWithUrlAttr.attrName, convertedUrl);
+              });
+            });
+          });
+        }
+      });
+    });
+    observer.observe(document.querySelector("body"), {childList: true, subtree: true});
+
+  })();
+</script>
+
+  <!-- ══ BOOT OVERLAY — cold boot intro (styles: main.css BOOT section · timeline: assets/js/boot.js) ══ -->
+  <div id="boot" aria-hidden="true">
+    <div class="boot-log" id="bootLog"></div>
+    <div class="mono-stage" id="monoStage">
+      <div class="monogram" id="monogram">ht<span class="sweep" id="sweep"></span></div>
+    </div>
+    <div class="skip-hint">tap / any key to skip</div>
+  </div>
+
+  <div class="wrap grid">
+    <nav class="cascade cascade-t1" aria-label="Primary">
+      <img id="site-icon" alt="icon">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+        <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
+      </button>
+      <div class="nav-links" id="site-menu">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="security-lab.html">Security Lab</a>
+        <a href="field-notes.html">Field Notes</a>
+        <a href="design-archive.html">Design Archive</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <header class="home-hero cascade cascade-t2">
+      <p class="eyebrow">Los Angeles · data / security / design</p>
+      <h1>Data-minded.<br>Design-led.<br>Security-aware.</h1>
+      <p class="hero-lede">I turn complex information and technical systems into clear evidence, usable experiences, and repeatable workflows.</p>
+    </header>
+
+    <section class="notice cascade cascade-t2" style="grid-column:auto;">
+      About
+    </section>
+    <!-- About -->
+    <section class="fullrow editorial cascade cascade-t2" style="max-width:54ch;line-height:1.4;">
+      <p>I am a hybrid practitioner working across information design, security research, agentic automation, and decentralized infrastructure.</p>
+      <p>This portfolio is also a live publishing experiment: a place to show how analysis, systems thinking, and visual judgment can make technical work easier to understand and use.</p>
+    </section>
+
+    <section class="notice cascade cascade-t3" style="grid-column:auto;">
+      Working range
+    </section>
+    <section class="practice-grid cascade cascade-t3" aria-label="Working range">
+      <article class="practice-card">
+        <span class="practice-index">01 / evidence</span>
+        <div><h2>Data &amp; Automation</h2><p>Structured analysis, operational reporting, and local-first workflows designed to make decisions easier to trace.</p></div>
+      </article>
+      <article class="practice-card">
+        <span class="practice-index">02 / systems</span>
+        <div><h2>Security &amp; Infrastructure</h2><p>Monitoring, hardening, deployment documentation, and defensive research grounded in practical constraints.</p></div>
+      </article>
+      <article class="practice-card">
+        <span class="practice-index">03 / experience</span>
+        <div><h2>Design &amp; Creative Tech</h2><p>Visual systems, editorial hierarchy, and interaction patterns that clarify technical subject matter.</p></div>
+      </article>
+    </section>
+
+    <!-- Latest Update (replaces the old live-feed placeholder) -->
+    <section id="home-news" class="fullrow editorial cascade cascade-t3">
+      <h3><em>Latest Update</em></h3>
+      <div data-news-content>
+        <p data-news-static><strong>02-27-2026</strong> — Site launch: web3-hosted portfolio published through decentralized storage with HTTPS-readable access.</p>
+      </div>
+    </section>
+
+    <!-- Current Focus -->
+    <section class="fullrow tight cascade cascade-t3" style="padding-top:52px;line-height:1.4;color:var(--green-dim);">
+      <h3><em>Current Focus</em></h3>
+      <p>Building toward practical agentic automation systems: local-first workflows, deployment documentation, infrastructure monitoring, and repeatable tools for real-world operations.</p>
+    </section>
+
+    <!-- Web3 Deployment -->
+    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
+      <h3><em><a href="projects.html">Web3 Deployment</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
+      <p>A decentralized publishing experiment — this site is hosted through web3 infrastructure and served over an HTTPS-readable proxy.</p>
+      <p class="small"><a href="projects.html">View deployment →</a></p>
+    </section>
+
+    <!-- Projects -->
+    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
+      <h3><em><a href="projects.html">Projects</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
+      <p>Web3 publishing, automation workflows, deployment experiments, and technical portfolio work.</p>
+      <p class="small"><a href="projects.html">View projects →</a></p>
+    </section>
+
+    <!-- Security Lab -->
+    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
+      <h3><em><a href="security-lab.html">Security Lab</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
+      <p>Infrastructure security, monitoring research, system hardening, and cybersecurity field notes.</p>
+      <p class="small"><a href="security-lab.html">View lab notes →</a></p>
+    </section>
+
+    <!-- Field Notes -->
+    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
+      <h3><em><a href="field-notes.html">Field Notes</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
+      <p>Install notes, deployment logs, security research, tools, and economic reality from the build process.</p>
+      <p class="small"><a href="field-notes.html">Read notes →</a></p>
+    </section>
+
+    <!-- Design Archive -->
+    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
+      <h3><em><a href="design-archive.html">Design Archive</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
+      <p>Visual systems, image work, and selected creative/production background.</p>
+      <p class="small"><a href="design-archive.html">View archive →</a></p>
+    </section>
+
+    <!-- Background / credentials -->
+    <section class="notice cascade cascade-t4" style="grid-column:auto;margin-top:40px;">
+      Background
+    </section>
+    <section class="fullrow editorial cascade cascade-t4" style="max-width:54ch;line-height:1.4;">
+      <p>I hold a Communication Arts degree from OTIS College of Art and Design and a Google Cybersecurity Professional Certificate. My work currently sits at the intersection of security, automation, decentralized publishing, and creative technical systems.</p>
+      <p>Earlier experience in visual production and television informs the way I approach systems, presentation, documentation, and workflow design.</p>
+    </section>
+
+    <!-- Contact -->
+    <section class="fullrow tight cascade cascade-t4" style="padding-top:24px;line-height:1.4;color:var(--green-dim);">
+      <h3><em><a href="contact.html">Contact</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
+      <p class="small"><a href="contact.html">Get in touch →</a></p>
+    </section>
+
+    <footer class="center small fullrow cascade cascade-t4">
+      <p>© 2026 k.b.r.<br><span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">visits: …</span></p>
+    </footer>
+
+  </div>
+  <script defer src="assets/js/init.js"></script>
+  <script src="assets/js/boot.js"></script>
+</body>
+</html>

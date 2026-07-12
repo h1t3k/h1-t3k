@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /styleguide.md
+
+Sitemap: https://h1-t3k.design/sitemap.xml

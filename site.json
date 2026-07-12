@@ -1,0 +1,49 @@
+{
+  "site": {
+    "title": "Keaton Raser / h1-t3k"
+  },
+  "nav": [
+    {
+      "label": "Home",
+      "href": "index.html"
+    },
+    {
+      "label": "Projects",
+      "href": "projects.html"
+    },
+    {
+      "label": "Security Lab",
+      "href": "security-lab.html"
+    },
+    {
+      "label": "Field Notes",
+      "href": "field-notes.html"
+    },
+    {
+      "label": "Design Archive",
+      "href": "design-archive.html"
+    },
+    {
+      "label": "Contact",
+      "href": "contact.html"
+    }
+  ],
+  "icon_grid": 8,
+  "wallet": {
+    "tip_address": "0x3eDf46047eE73F3f3bFdeB68d171177028eD3Eeb"
+  },
+  "web3": {
+    "url": "web3://0x2F717f56D810A3C47aa149d1775f75f87C4B4256:42170/"
+  },
+  "analytics": {
+    "visitor_counter_enabled": true,
+    "visits_endpoint": "/api/visits",
+    "stats_endpoint": "/api/stats",
+    "privacy_mode": "anonymized"
+  },
+  "feeds": {
+    "news": "feeds.json",
+    "devsecops_source": "",
+    "bio_source": ""
+  }
+}
