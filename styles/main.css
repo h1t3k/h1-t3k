@@ -183,6 +183,15 @@ nav img{
   image-rendering:pixelated;opacity:0.72;filter:saturate(60%);flex:0 0 auto;
   transition:opacity 0.2s ease, filter 0.2s ease;
 }
+/* Brand 'ht' monogram in the nav (replaces the generated icon) */
+.site-mono{
+  flex:0 0 auto;position:relative;z-index:1;
+  font-family:'Monogram',var(--font-display);
+  font-weight:800;font-size:2rem;line-height:1;
+  text-transform:lowercase;letter-spacing:-0.02em;
+  color:var(--green);user-select:none;
+  text-shadow:0 0 14px rgba(57,211,83,0.3);
+}
 .nav-links{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
 nav a{
   /* Menu is BaseNine (mono), non-italic — uppercase + tracking kept for rhythm */
@@ -585,6 +594,10 @@ section.fullrow{padding-left:9px}
 .project-flow li:nth-child(3){z-index:3}
 .project-flow li:nth-child(4){z-index:4}
 .project-flow li:nth-child(5){z-index:5}
+.project-flow li:nth-child(6){z-index:6}
+.project-flow li:nth-child(7){z-index:7}
+.project-flow li:nth-child(8){z-index:8}
+.project-flow li:nth-child(9){z-index:9}
 .project-flow .post-item{
   min-height:clamp(300px,65svh,640px);padding:clamp(28px,6vw,64px);display:flex;flex-direction:column;
   justify-content:center;border-left-width:4px;isolation:isolate;
