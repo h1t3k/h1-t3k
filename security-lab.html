@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Security Lab — Keaton Raser</title>
+<title>Security Lab</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Security research scope covering endpoint visibility, secure deployment, Linux hardening, access control, and safely documented evidence.">
+<meta name="description" content="Defensive security research: endpoint visibility, secure deployment, access control and hardening, and safe evidence. Reproducible procedures documented without exposing infrastructure.">
+<meta name="keywords" content="security lab, defensive research, endpoint visibility, secure deployment, least privilege, system hardening, linux hardening, monitoring, wazuh, safe evidence">
 <link rel="canonical" href="https://h1-t3k.design/security-lab.html">
-<meta property="og:title" content="Security Lab — Keaton Raser">
-<meta property="og:description" content="Practical defensive research across visibility, deployment, hardening, and safe evidence.">
+<meta property="og:title" content="Security Lab — h1-t3k">
+<meta property="og:description" content="Defensive security research: visibility, hardening, and evidence — documented without exposing the system it describes.">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="styles/main.css">
 </head>
@@ -194,14 +195,13 @@
 
   <div class="wrap grid">
     <nav aria-label="Primary">
-      <span class="site-mono" role="img" aria-label="h1-t3k">ht</span>
+      <span class="site-mono" role="img" aria-label="h1-t3k">&oslash;</span>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
         <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
       </button>
       <div class="nav-links" id="site-menu">
         <a href="index.html">Home</a>
         <a href="projects.html">Projects</a>
-        <a href="security-lab.html" aria-current="page">Security Lab</a>
         <a href="field-notes.html">Field Notes</a>
         <a href="design-archive.html">Design Archive</a>
         <a href="contact.html">Contact</a>
@@ -224,12 +224,13 @@
     </section>
 
     <section id="analysis-content" class="fullrow prose" data-static-analysis style="padding-top:24px;">
+      <div class="sys-line"><span class="prompt"></span>ls -t research/</div>
       <h2>Research Scope</h2>
       <p>The public lab is organized around four practical questions. What should be visible? Which controls reduce risk without making a system unusable? What evidence proves a change worked? What must stay private when the work is documented?</p>
       <ul class="scope-list">
         <li><strong>Endpoint visibility</strong><span>Logs, events, and signals that support useful investigation.</span></li>
         <li><strong>Secure deployment</strong><span>Trust boundaries, preflight checks, and repeatable release procedures.</span></li>
-        <li><strong>Access and hardening</strong><span>Least privilege, configuration review, and Linux system hygiene.</span></li>
+        <li><strong>Access and hardening</strong><span>Least privilege, configuration review, and Linux system hygiene &mdash; plus professional guidance on limiting and eliminating scope creep, where colleagues accumulate more access keys and permissions than their role requires, regardless of motive, ego or otherwise.</span></li>
         <li><strong>Safe evidence</strong><span>Redacted screenshots, terminal excerpts, and notes that teach without exposing infrastructure.</span></li>
       </ul>
       <p class="small">Detailed procedures and evidence will be added after hostnames, usernames, addresses, repository details, and credentials are removed.</p>
