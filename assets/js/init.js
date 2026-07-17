@@ -193,6 +193,16 @@
     const items = [...document.querySelectorAll('.project-flow .post-item')];
     if (!items.length) return;
 
+    const summary = document.querySelector('[data-project-summary]');
+    if (summary) {
+      const n = items.length;
+      const words = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
+      const word = words[n] || String(n);
+      const label = word.charAt(0).toUpperCase() + word.slice(1);
+      const noun = n === 1 ? 'track' : 'tracks';
+      summary.textContent = `${label} connected ${noun}. Scroll for scope, current state, and the next layer of evidence.`;
+    }
+
     items.forEach((item) => item.setAttribute('data-scroll-project', ''));
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced || !('IntersectionObserver' in window)) {
@@ -556,8 +566,8 @@
       return posts.map(post => {
         const safeDate = escapeHTML(post.date || "");
         const safeTitle = escapeHTML(post.title || "");
-        const web3Url = (runtimeCfg?.web3?.url || "web3://0x2F717f56D810A3C47aa149d1775f75f87C4B4256:42170/").trim();
-        const safeWeb3Url = sanitizeURL(web3Url) || "web3://0x2F717f56D810A3C47aa149d1775f75f87C4B4256:42170/";
+        const web3Url = (runtimeCfg?.web3?.url || "web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/").trim();
+        const safeWeb3Url = sanitizeURL(web3Url) || "web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/";
         const w3rx = /\bweb3\b/i;
         const match = (post.title || "").match(w3rx);
         let titleHtml;
