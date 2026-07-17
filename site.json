@@ -12,10 +12,6 @@
       "href": "projects.html"
     },
     {
-      "label": "Security Lab",
-      "href": "security-lab.html"
-    },
-    {
       "label": "Field Notes",
       "href": "field-notes.html"
     },
@@ -29,11 +25,8 @@
     }
   ],
   "icon_grid": 8,
-  "wallet": {
-    "tip_address": "0x3eDf46047eE73F3f3bFdeB68d171177028eD3Eeb"
-  },
   "web3": {
-    "url": "web3://0x2F717f56D810A3C47aa149d1775f75f87C4B4256:42170/"
+    "url": "web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/"
   },
   "analytics": {
     "visitor_counter_enabled": true,
