@@ -297,10 +297,6 @@ nav a.current, nav a[aria-current="page"]{opacity:1;color:var(--green);text-deco
   body.menu-open>.nav-links[data-mobile-menu]{
     visibility:visible;pointer-events:auto;transform:translate3d(0,0,0);transition-delay:0s;
   }
-  body.nav-enhanced>.nav-links[data-mobile-menu]::before{
-    content:'// portfolio navigation';font-family:var(--font-mono);font-size:var(--step--2);
-    letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-bottom:18px;
-  }
   body.nav-enhanced>.nav-links[data-mobile-menu] a{
     width:100%;padding:10px 0;border-bottom:1px solid var(--border);
     font-family:var(--font-display);font-size:clamp(1.75rem,9vw,2.5rem);font-weight:700;
