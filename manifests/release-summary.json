@@ -6,15 +6,16 @@
     "content_bytes": 332129
   },
   "candidate": {
-    "file_count": 25,
-    "content_bytes": 260330,
-    "manifest_bytes": 2276,
-    "manifest_sha256": "461b269225904781e0bcfed7932be751777dc77f33c39424cd2b83918bc33583"
+    "file_count": 27,
+    "content_bytes": 285455,
+    "manifest_bytes": 2460,
+    "manifest_sha256": "60c2bfc85ca3ac7bc2952eb373760912156ed3c0e5524ea880616b6cdb238ea1"
   },
   "delta": {
-    "file_count": -3,
-    "content_bytes": -71799
+    "file_count": -1,
+    "content_bytes": -46674
   },
-  "authorization": "non-production only",
-  "deployment_authorized": false
+  "authorization": "github-pages preview only",
+  "github_pages_preview_authorized": true,
+  "production_web3_deployment_authorized": false
 }

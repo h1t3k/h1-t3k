@@ -1,5 +1,7 @@
+assets/js/boot-gate.js
 assets/js/boot.js
 assets/js/init.js
+assets/js/routes.js
 contact.html
 design-archive.html
 field-notes.html

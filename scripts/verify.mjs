@@ -52,6 +52,7 @@ const pageMetadata = [];
 
 for (const path of htmlFiles) {
   const html = read(path);
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1] || "";
   const canonical = linkHref(html, "canonical");
   const navBlock = html.match(/<div class="nav-links"[^>]*>([\s\S]*?)<\/div>/)?.[1] || "";
@@ -60,6 +61,7 @@ for (const path of htmlFiles) {
 
   check(occurrences(html, /<h1(?:\s|>)/g) === 1, `${path}: exactly one H1`);
   check(occurrences(html, /<main(?:\s|>)/g) === 1, `${path}: exactly one main landmark`);
+  check(new Set(ids).size === ids.length, `${path}: no duplicate IDs`);
   check(occurrences(html, /<link rel="canonical"/g) === 1, `${path}: exactly one canonical`);
   check(Boolean(metaContent(html, "name", "description")), `${path}: description present`);
   check(Boolean(metaContent(html, "property", "og:title")), `${path}: Open Graph title present`);
@@ -79,6 +81,15 @@ for (const path of htmlFiles) {
   );
   check(!/<meta name="keywords"/i.test(html), `${path}: no obsolete keyword metadata`);
   check(!/\beyebrow\b/i.test(html), `${path}: decorative eyebrow removed`);
+  for (const asset of [
+    "assets/js/routes.js?v=3.2",
+    "assets/js/boot-gate.js?v=3.2",
+    "styles/main.css?v=3.2",
+    "assets/js/boot.js?v=3.2",
+    "assets/js/init.js?v=3.2"
+  ]) {
+    check(html.includes(asset), `${path}: release asset version is coherent (${asset})`);
+  }
 
   canonicalSet.add(canonical);
   pageMetadata.push({
@@ -145,19 +156,22 @@ check(archiveHtml.includes("never stored") && archiveHtml.includes("never includ
 
 const initJs = read("assets/js/init.js");
 const bootJs = read("assets/js/boot.js");
-try {
-  new Function(initJs);
-  checks.push("init.js parses");
-} catch {
-  failures.push("init.js parses");
+const bootGateJs = read("assets/js/boot-gate.js");
+const routesJs = read("assets/js/routes.js");
+for (const [name, source] of [
+  ["init.js", initJs],
+  ["boot.js", bootJs],
+  ["boot-gate.js", bootGateJs],
+  ["routes.js", routesJs]
+]) {
+  try {
+    new Function(source);
+    checks.push(`${name} parses`);
+  } catch {
+    failures.push(`${name} parses`);
+  }
 }
-try {
-  new Function(bootJs);
-  checks.push("boot.js parses");
-} catch {
-  failures.push("boot.js parses");
-}
-check(!/\blocalStorage\b/.test(initJs), "init.js creates no persistent visitor identifier");
+check(!/(visitor|user|fingerprint).*(?:localStorage|sessionStorage)/i.test(initJs), "init.js creates no persistent visitor identifier");
 check(initJs.includes("local_custom_event_only") === false, "runtime does not imply a network analytics transport");
 for (const eventName of site.analytics.allowed_conversion_events) {
   check(initJs.includes(`"${eventName}"`), `conversion event is implemented (${eventName})`);
@@ -165,12 +179,42 @@ for (const eventName of site.analytics.allowed_conversion_events) {
 check(bootJs.includes("FAILED_SAFE") && bootJs.includes("SKIPPED") && bootJs.includes("COMPLETE"), "boot terminal states implemented");
 for (const eventName of site.analytics.allowed_boot_events) {
   check(
-    read("index.html").includes(`"${eventName}"`) || bootJs.includes(`"${eventName}"`),
+    bootGateJs.includes(`"${eventName}"`) || bootJs.includes(`"${eventName}"`),
     `boot event is implemented (${eventName})`
   );
 }
-check(read("index.html").includes('get("entry") === "redirect"'), "boot requires exact redirect marker");
-check(read("index.html").includes("history.replaceState"), "redirect marker is removed");
+check(routesJs.includes('"h1_full_boot_v3"') && routesJs.includes("24 * 60 * 60 * 1000"), "boot has versioned 24-hour eligibility");
+check(
+  bootGateJs.includes("manifest.replayParameter") &&
+    bootGateJs.includes("manifest.replayValue"),
+  "boot requires exact presentation replay marker"
+);
+check(bootGateJs.includes("history.replaceState"), "presentation replay marker is removed");
+for (const routeName of ["Home", "Projects & Systems", "Notes", "Type & Archive", "Contact", "Security Lab"]) {
+  check(routesJs.includes(`name: "${routeName}"`), `route manifest includes ${routeName}`);
+}
+check(
+  occurrences(routesJs, /parallax: true/g) === 2 &&
+    occurrences(routesJs, /parallax: false/g) === 4,
+  "route manifest scopes parallax to Home and Projects"
+);
+check(initJs.includes("CONFIRMED_WEB3_ROUTE"), "confirmed Web3 capability state implemented");
+check(initJs.includes("UNKNOWN_WEB3_ROUTE"), "unknown Web3 capability state implemented");
+check(initJs.includes("NOTICE_SUPPRESSED_BY_USER"), "suppressed Web3 notice state implemented");
+check(
+  read("projects.html").includes(site.web3.direct_uri),
+  "direct Web3 URI is preserved"
+);
+check(
+  !read("field-notes.html").includes("data-depth-flow") &&
+    !read("design-archive.html").includes("data-depth-flow"),
+  "Notes and Type & Archive remain free of parallax"
+);
+check(
+  !htmlFiles.some((path) => /class="sys-line"|class="prompt"/.test(read(path))) &&
+    !/\.prompt::before/.test(read("styles/main.css")),
+  "dollar-prefixed page eyebrows are removed"
+);
 check(occurrences(read("projects.html"), /<dt>Contribution boundary<\/dt>/g) === 4, "selected projects state contribution boundaries");
 
 const robots = read("robots.txt");
