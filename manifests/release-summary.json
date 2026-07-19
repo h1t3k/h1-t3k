@@ -1,0 +1,20 @@
+{
+  "baseline": {
+    "manifest_sha256": "b25a835fc6510388cd7846df964d05759dbfcbdd5ca55ed3191d371da2da7bee",
+    "anchor_commit": "419418f85b9c5bc473b0fa83deb19e05e303be17",
+    "file_count": 28,
+    "content_bytes": 332129
+  },
+  "candidate": {
+    "file_count": 25,
+    "content_bytes": 260330,
+    "manifest_bytes": 2276,
+    "manifest_sha256": "461b269225904781e0bcfed7932be751777dc77f33c39424cd2b83918bc33583"
+  },
+  "delta": {
+    "file_count": -3,
+    "content_bytes": -71799
+  },
+  "authorization": "non-production only",
+  "deployment_authorized": false
+}

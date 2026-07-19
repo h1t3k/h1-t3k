@@ -1,346 +1,218 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Keaton Raser — Data, Security &amp; Creative Technology</title>
+<title>Home — Keaton Raser</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="A hybrid portfolio spanning data-minded analysis, security, automation, visual systems, and creative technology by Keaton Raser in Los Angeles.">
+<meta name="description" content="Keaton Raser designs and documents technical systems across Linux security, on-chain publishing, and information-rich interfaces.">
+<meta name="bingbot" content="nocache">
+<meta name="theme-color" content="#0d0f0b">
 <link rel="canonical" href="https://h1-t3k.design/">
-<meta property="og:title" content="Keaton Raser — Data, Security &amp; Creative Technology">
-<meta property="og:description" content="Design-led technical work across data, security, automation, and creative systems.">
+<meta property="og:title" content="Home — Keaton Raser">
+<meta property="og:description" content="Design-led technical work across Linux security, on-chain publishing, and information-rich interfaces.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://h1-t3k.design/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Home — Keaton Raser">
+<meta name="twitter:description" content="Design-led technical work across Linux security, on-chain publishing, and information-rich interfaces.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "https://h1-t3k.design/#website",
-      "url": "https://h1-t3k.design/",
-      "name": "Keaton Raser — Data, Security & Creative Technology",
-      "description": "A hybrid portfolio spanning data-minded analysis, security, automation, visual systems, and creative technology by Keaton Raser in Los Angeles.",
-      "inLanguage": "en",
-      "keywords": ["Los Angeles", "data", "security", "design", "data analysis", "security research", "agentic automation", "visual systems", "creative technology"],
-      "publisher": { "@id": "https://h1-t3k.design/#person" }
-    },
-    {
-      "@type": "Person",
-      "@id": "https://h1-t3k.design/#person",
-      "name": "Keaton Raser",
-      "url": "https://h1-t3k.design/",
-      "jobTitle": "Data, Security & Design Practitioner",
-      "knowsAbout": ["data analysis", "information design", "security research", "system hardening", "agentic automation", "decentralized infrastructure", "visual systems", "creative technology"],
-      "address": { "@type": "PostalAddress", "addressLocality": "Los Angeles", "addressRegion": "CA", "addressCountry": "US" }
-    }
+  "@type": "Person",
+  "name": "Keaton Raser",
+  "url": "https://h1-t3k.design/",
+  "email": "mailto:h1t3k@proton.me",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Los Angeles",
+    "addressRegion": "CA",
+    "addressCountry": "US"
+  },
+  "sameAs": [
+    "https://github.com/h1t3k"
   ]
 }
 </script>
-<!-- FLASH-FREE GATE — must stay inline, in <head>, before any CSS.
-     Runs synchronously so content is hidden before first paint
-     only when the boot will actually play. -->
 <script>
 (function () {
+  var html = document.documentElement;
+  var key = "ht_boot_v2";
+  var state = "INELIGIBLE";
+  var reduced = false;
+  var eligible = false;
+
   try {
-    var seen    = sessionStorage.getItem('ht_boot_v1');
-    var reduced = window.matchMedia &&
-                  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!seen) {
-      document.documentElement.classList.add(reduced ? 'booting-rm' : 'booting');
-      sessionStorage.setItem('ht_boot_v1', '1'); /* set at start: a mid-boot
-        reload does not replay. Swap to set-on-complete if replay is wanted. */
+    var url = new URL(window.location.href);
+    eligible = url.searchParams.get("entry") === "redirect";
+    if (eligible) {
+      url.searchParams.delete("entry");
+      history.replaceState(null, "", url.pathname + (url.search ? url.search : "") + url.hash);
     }
-  } catch (e) { /* storage unavailable → no boot, content shows normally */ }
+    reduced = !!(window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    if (eligible && sessionStorage.getItem(key) !== "1") {
+      state = "ELIGIBLE";
+      html.classList.add(reduced ? "booting-rm" : "booting");
+    } else {
+      html.classList.add("boot-done");
+    }
+  } catch (error) {
+    html.classList.add("boot-done");
+  }
+
+  window.__H1_BOOT__ = { key: key, state: state, reduced: reduced };
+  if (state === "ELIGIBLE") {
+    window.dispatchEvent(new CustomEvent("h1t3k:boot", {
+      detail: { name: "boot_eligible" }
+    }));
+  }
+  window.__H1_BOOT_WATCHDOG__ = window.setTimeout(function () {
+    if (!html.classList.contains("booting") && !html.classList.contains("booting-rm")) return;
+    html.classList.remove("booting", "booting-rm");
+    html.classList.add("boot-done");
+    window.__H1_BOOT__.state = "FAILED_SAFE";
+    window.dispatchEvent(new CustomEvent("h1t3k:boot", {
+      detail: { name: "boot_failed_safe" }
+    }));
+  }, 4500);
 })();
 </script>
 <link rel="stylesheet" href="styles/main.css">
 </head>
-<body><script>
-  /** 
-   * Patch by web3url-gateway : Convert web3:// URLs into gateway URLs in various places
-   */
-  (function() {
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-    // Web3:// URL to Gateway URL convertor
-    const convertWeb3UrlToGatewayUrl = function(web3Url) {
-      // Parse the URL
-      let matchResult = web3Url.match(/^(?<protocol>[^:]+):\/\/(?<hostname>[^:/?]+)(:(?<chainId>[1-9][0-9]*))?(?<path>.*)?$/)
-      if(matchResult == null) {
-        // Invalid web3:// URL
-        return null;
-      }
-      let urlMainParts = matchResult.groups
-  
-      // Check protocol name
-      if(["web3", "w3"].includes(urlMainParts.protocol) == false) {
-        // Bad protocol name"
-        return null;
-      }
-  
-      // Get subdomain components
-      let gateway = window.location.hostname.split('.').slice(-2).join('.') + (window.location.port ? ':' + window.location.port : '');
-      let subDomains = []
-      // Is the contract an ethereum address?
-      if(/^0x[0-9a-fA-F]{40}$/.test(urlMainParts.hostname)) {
-        subDomains.push(urlMainParts.hostname)
-        if(urlMainParts.chainId !== undefined) {
-          subDomains.push(urlMainParts.chainId)
-        }
-        else {
-          subDomains.push(1);
-        }
-      }
-      // It is a domain name
-      else {
-        if(urlMainParts.hostname.endsWith('.eth') && urlMainParts.chainId === undefined) {
-          subDomains.push(urlMainParts.hostname)
-          subDomains.push(1)
-        }
-        else {
-          subDomains.push(urlMainParts.hostname)
-          if(urlMainParts.chainId !== undefined) {
-            subDomains.push(urlMainParts.chainId)
-          }
-        }
-      }
-  
-      let gatewayUrl = window.location.protocol + "//" + subDomains.join(".") + "." + gateway + (urlMainParts.path ?? "")
-      return gatewayUrl;
-    }
-
-
-    // Wrap the fetch() function to convert web3:// URLs into gateway URLs
-    const originalFetch = fetch;
-    fetch = function(input, init) {
-      // Process absolute web3:// URLS: convert them into gateway HTTP URLs
-      if (typeof input === 'string' && input.startsWith('web3://')) {
-        const convertedUrl = convertWeb3UrlToGatewayUrl(input);
-        if(convertedUrl == null) {
-          console.error("Gateway fetch() wrapper: Unable to convert web3:// URL: " + input);
-          return;
-        }
-        console.log('Gateway fetch() wrapper: Converted ' + input + ' to ' + convertedUrl);
-        input = convertedUrl;
-      }
-
-      // Pipe through the original fetch function
-      return originalFetch(input, init);
-    };
-
-
-    // Listen for clicks on <a> tags, and convert web3:// URLs into gateway URLs
-    document.addEventListener('click', function(event) {
-      const closestATag = event.target.closest('a');
-      if(closestATag && closestATag.href.startsWith('web3://')) {
-        event.preventDefault();
-        const targetUrl = closestATag.href;
-        const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
-        if(convertedUrl == null) {
-          console.error("Gateway A tag click wrapper: Unable to convert web3:// URL: " + targetUrl);
-          return;
-        }
-        console.log('Gateway A tag click wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
-        // If the A tag has a target="_blank" attribute, open the URL in a new tab
-        if(closestATag.target === '_blank') {
-          window.open(convertedUrl, '_blank');
-        }
-        else {
-          window.location.href = convertedUrl;
-        }
-      }
-    });
-
-
-    // All tags with a attribute that can get an URL: override the setting of the attribute to convert web3:// URLs into gateway URLs
-    const elementsWithUrlAttr = [
-      {tagName: 'a', attrName: 'href'}, // <a>
-      {tagName: 'link', attrName: 'href'}, // <link>
-      {tagName: 'area', attrName: 'href'}, // <area>
-      {tagName: 'img', attrName: 'src'}, // <img>
-      {tagName: 'script', attrName: 'src'}, // <script>
-      {tagName: 'iframe', attrName: 'src'}, // <iframe>
-      // {tagName: 'audio', attr: 'src'}, // <audio>
-      // {tagName: 'video', attr: 'src'}, // <video>
-      {tagName: 'source', attrName: 'src'}, // <source>
-      {tagName: 'embed', attrName: 'src'}, // <embed>
-      {tagName: 'input', attrName: 'src'}, // <input type="image">
-      {tagName: 'object', attrName: 'data'}, // <object>
-      {tagName: 'image', attrName: 'href'}, // <image> of SVG
-    ];
-    // Override the setter of the attribute to convert web3:// URLs into gateway URLs
-    elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
-      const element = document.createElement(elementWithUrlAttr.tagName);
-      const proto = element.constructor.prototype;
-      const descriptor = Object.getOwnPropertyDescriptor(proto, elementWithUrlAttr.attrName);
-      if (!descriptor || typeof descriptor.set !== 'function') {
-        // Skip if no setter (e.g., SVG <image> 'href')
-        return;
-      }
-      Object.defineProperty(proto, elementWithUrlAttr.attrName, {
-        set: function(attrValue) {
-          if(attrValue && typeof attrValue === 'string' && attrValue.startsWith('web3://')) {
-            const convertedUrl = convertWeb3UrlToGatewayUrl(attrValue);
-            if(convertedUrl == null) {
-              console.error("Gateway " + element.name + " " + elementWithUrlAttr.attrName + " setter wrapper: Unable to convert web3:// URL: " + attrValue);
-              descriptor.set.call(this, attrValue);
-              return;
-            }
-            console.log('Gateway ' + element.name + ' ' + elementWithUrlAttr.attrName + ' setter wrapper: Converted ' + attrValue + ' to ' + convertedUrl);
-            descriptor.set.call(this, convertedUrl);
-          }
-          else {
-            descriptor.set.call(this, attrValue);
-          }
-        }
-      });
-    });
-    // Added nodes to the DOM : convert web3:// URLs into gateway URLs
-    const observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        // Insertion of nodes with the src attribute (img, iframe, audio, ...)
-        if(mutation.type === 'childList') {
-          mutation.addedNodes.forEach(function(addedNode) {
-            // Ignore non-element nodes
-            if(addedNode.nodeType != 1) {
-              return;
-            }
-            // Find all nodes that have a web3:// URL in their attribute as defined in elementsWithUrlAttr
-            elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
-              const nodes = [...addedNode.querySelectorAll(elementWithUrlAttr.tagName + '[' + elementWithUrlAttr.attrName + '^="web3://"]')];
-              // Check if the addedNode itself matches the tag and has the attribute starting with web3://
-              if (
-                addedNode.tagName === elementWithUrlAttr.tagName.toUpperCase() &&
-                typeof addedNode.getAttribute === 'function' &&
-                typeof addedNode.getAttribute(elementWithUrlAttr.attrName) === 'string' &&
-                addedNode.getAttribute(elementWithUrlAttr.attrName).startsWith('web3://')
-              ) {
-                nodes.push(addedNode);
-              }
-              nodes.forEach(function(node) {
-                const targetUrl = node.getAttribute(elementWithUrlAttr.attrName);
-                const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
-                if(convertedUrl == null) {
-                  console.error("Gateway " + node.tagName + " injection wrapper: Unable to convert web3:// URL: " + targetUrl);
-                  return;
-                }
-                console.log('Gateway ' + node.tagName + ' injection wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
-                node.setAttribute(elementWithUrlAttr.attrName, convertedUrl);
-              });
-            });
-          });
-        }
-      });
-    });
-    observer.observe(document.querySelector("body"), {childList: true, subtree: true});
-
-  })();
-</script>
-
-  <!-- ══ BOOT OVERLAY — cold boot intro (styles: main.css BOOT section · timeline: assets/js/boot.js) ══ -->
-  <div id="boot" aria-hidden="true">
-    <div class="boot-log" id="bootLog"></div>
+  <div id="boot" role="dialog" aria-modal="true" aria-label="H1-T3K introduction">
+    <div class="boot-log" id="bootLog" aria-hidden="true"></div>
     <div class="mono-stage" id="monoStage">
       <div class="monogram" id="monogram">ht<span class="sweep" id="sweep"></span></div>
     </div>
-    <div class="skip-hint">tap / any key to skip</div>
+    <button class="skip-hint" id="bootSkip" type="button">Skip intro</button>
   </div>
 
   <div class="wrap grid">
     <nav class="cascade cascade-t1" aria-label="Primary">
-      <span class="site-mono" role="img" aria-label="h1-t3k">&oslash;</span>
+      <a class="site-mono" href="/" aria-label="H1-T3K home">&oslash;</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
         <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
       </button>
       <div class="nav-links" id="site-menu">
-        <a href="index.html" aria-current="page">Home</a>
+        <a href="/" aria-current="page">Home</a>
         <a href="projects.html">Projects</a>
-        <a href="field-notes.html">Field Notes</a>
-        <a href="design-archive.html">Design Archive</a>
+        <a href="field-notes.html">Notes</a>
+        <a href="design-archive.html">Type &amp; Archive</a>
         <a href="contact.html">Contact</a>
       </div>
     </nav>
 
-    <header class="home-hero cascade cascade-t2">
-      <h1>
-        <span class="dim-line">Data-minded.</span>
-        Design-led.
-        <span class="amber-line">Security-aware.</span>
-      </h1>
-      <p class="hero-lede">Turning complex information and technical systems into clear evidence, usable experiences, and repeatable workflows.</p>
-    </header>
+    <main id="main-content" class="page-grid" tabindex="-1">
+      <header class="home-hero cascade cascade-t2">
+        <h1>
+          <span class="dim-line">Data-minded.</span>
+          Design-led.
+          <span class="amber-line">Security-aware.</span>
+        </h1>
+        <p class="hero-lede"><strong class="role-title">Design engineer for technical web experiences.</strong> I design and document systems across Linux security, on-chain publishing, and information-rich interfaces—turning constraints and evidence into work people can inspect and use.</p>
+        <div class="hero-actions" aria-label="Primary actions">
+          <a class="button button-primary" href="projects.html" data-event="case_study_open">View selected work</a>
+          <a class="button" href="mailto:h1t3k@proton.me?subject=Professional%20conversation" data-event="contact_click">Email Keaton</a>
+        </div>
+      </header>
 
-    <section class="notice cascade cascade-t2" style="grid-column:auto;">
-      <div class="sys-line"><span class="prompt"></span>whoami</div>
-    </section>
-    <!-- About -->
-    <section class="fullrow editorial cascade cascade-t2" style="max-width:54ch;line-height:1.4;">
-      <p>A hybrid practitioner working across information design, security research, agentic automation, and decentralized infrastructure.</p>
-      <p>This portfolio is also a live publishing experiment: a place to show how analysis, systems thinking, and visual judgment can make technical work easier to understand and use.</p>
-    </section>
+      <section class="fullrow intro-panel cascade cascade-t2" aria-labelledby="intro-title">
+        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>whoami</div>
+        <h2 id="intro-title">Technical systems, made legible</h2>
+        <p>Keaton Raser is a Los Angeles–based designer and technical practitioner focused on Linux security, on-chain publishing, and information design.</p>
+        <p>Selected work includes an on-chain Web3 deployment, repository-backed Linux and monitoring projects, and visual systems. Every project links to the strongest available evidence and states its current status.</p>
+      </section>
 
-    <!-- Latest Update (replaces the old live-feed placeholder) -->
-    <section id="home-news" class="fullrow editorial cascade cascade-t3" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding-top:24px;padding-bottom:24px;">
-      <h3><em>Latest Update</em></h3>
-      <div data-news-content>
-        <p data-news-static><strong>02-27-2026</strong> — Site launch: web3-hosted portfolio published through decentralized storage with HTTPS-readable access.</p>
-      </div>
-    </section>
+      <section class="fullrow cascade cascade-t3" aria-labelledby="selected-title">
+        <div class="section-heading">
+          <div>
+            <div class="sys-line" aria-hidden="true"><span class="prompt"></span>ls selected-work/</div>
+            <h2 id="selected-title">Selected work</h2>
+          </div>
+          <a class="text-link" href="projects.html" data-event="case_study_open">All project evidence →</a>
+        </div>
+        <div class="evidence-grid">
+          <a class="evidence-card" href="projects.html#web3-portfolio" data-event="case_study_open">
+            <span class="card-index">01 / publishing systems</span>
+            <h3>On-chain Web3 portfolio</h3>
+            <p>Contract-backed static publishing on Arbitrum Nova, presented to ordinary browsers through an HTTPS proxy or gateway.</p>
+            <span class="tag">Runtime evidence + architecture</span>
+          </a>
+          <a class="evidence-card" href="projects.html#aquarian" data-event="case_study_open">
+            <span class="card-index">02 / Linux interaction</span>
+            <h3>Aquarian</h3>
+            <p>An intentionally named terminal aquarium with preflight checks, scoped privileges, SSH recovery, and GNOME idle integration.</p>
+            <span class="tag">Repository-backed</span>
+          </a>
+          <a class="evidence-card" href="projects.html#wazuh" data-event="case_study_open">
+            <span class="card-index">03 / defensive monitoring</span>
+            <h3>Wazuh lab topology</h3>
+            <p>A VirtualBox-based Wazuh setup connecting a macOS host and Debian agents, with enrollment and resource-tuning notes.</p>
+            <span class="tag">Repository-backed</span>
+          </a>
+          <a class="evidence-card" href="design-archive.html" data-event="case_study_open">
+            <span class="card-index">04 / visual systems</span>
+            <h3>Type &amp; design archive</h3>
+            <p>Live specimens of the portfolio’s bundled fonts and an accurately colored, IPFS-backed visual archive.</p>
+            <span class="tag">Status disclosed</span>
+          </a>
+        </div>
+      </section>
 
-    <!-- Web3 Deployment -->
-    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
-      <h3><em><a href="projects.html">Web3 Deployment</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
-      <p>A decentralized publishing experiment — this site is hosted through web3 infrastructure and served over an HTTPS-readable proxy.</p>
-      <p class="small"><a href="projects.html">View deployment →</a></p>
-    </section>
+      <section class="fullrow cascade cascade-t3" aria-labelledby="practice-title">
+        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>cat practice.txt</div>
+        <h2 id="practice-title">Working range</h2>
+        <div class="practice-grid">
+          <article class="practice-card">
+            <span class="practice-index">01 / evidence</span>
+            <div><h3>Information design</h3><p>Editorial hierarchy and interface systems that make dense technical material easier to inspect.</p></div>
+          </article>
+          <article class="practice-card">
+            <span class="practice-index">02 / systems</span>
+            <div><h3>Security &amp; Linux</h3><p>Monitoring, least privilege, recovery planning, deployment notes, and reproducible procedures.</p></div>
+          </article>
+          <article class="practice-card">
+            <span class="practice-index">03 / delivery</span>
+            <div><h3>On-chain publishing</h3><p>Static, dependency-light interfaces with explicit provenance, deterministic manifests, and layered runtime diagnostics.</p></div>
+          </article>
+        </div>
+      </section>
 
-    <!-- Projects -->
-    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
-      <h3><em><a href="projects.html">Projects</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
-      <p>Web3 publishing, automation workflows, deployment experiments, and technical portfolio work.</p>
-      <p class="small"><a href="projects.html">View projects →</a></p>
-    </section>
+      <section class="fullrow architecture-panel cascade cascade-t3" aria-labelledby="architecture-title">
+        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>inspect deployment</div>
+        <h2 id="architecture-title">A portfolio with inspectable infrastructure</h2>
+        <p>This site has an on-chain Web3 deployment on Arbitrum Nova (chain ID 42170). Ordinary browsers receive it through an HTTPS proxy or gateway; that presentation layer is not described as the origin.</p>
+        <dl class="fact-list">
+          <div><dt>Contract</dt><dd><code>0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470</code></dd></div>
+          <div><dt>Direct route</dt><dd><a href="web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/" data-event="case_study_open"><code>web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/</code></a></dd></div>
+        </dl>
+      </section>
 
-    <!-- Security Lab -->
-    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
-      <h3><em><a href="security-lab.html">Security Lab</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
-      <p>Infrastructure security, monitoring research, system hardening, and cybersecurity field notes.</p>
-      <p class="small"><a href="security-lab.html">View lab notes →</a></p>
-    </section>
+      <section class="fullrow background-panel cascade cascade-t4" aria-labelledby="background-title">
+        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>cat background.txt</div>
+        <h2 id="background-title">Background</h2>
+        <p>Communication Arts at Otis College of Art and Design and the Google Cybersecurity Professional Certificate inform a practice that connects visual judgment, documentation, and technical systems.</p>
+      </section>
 
-    <!-- Field Notes -->
-    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
-      <h3><em><a href="field-notes.html">Field Notes</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
-      <p>Install notes, deployment logs, security research, tools, and economic reality from the build process.</p>
-      <p class="small"><a href="field-notes.html">Read notes →</a></p>
-    </section>
-
-    <!-- Design Archive -->
-    <section class="fullrow tight cascade cascade-t3" style="padding-top:9px;line-height:1.4;color:var(--green-dim);">
-      <h3><em><a href="design-archive.html">Design Archive</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
-      <p>Visual systems, image work, and selected creative/production background.</p>
-      <p class="small"><a href="design-archive.html">View archive →</a></p>
-    </section>
-
-    <!-- Background / credentials -->
-    <section class="notice cascade cascade-t4" style="grid-column:auto;margin-top:40px;">
-      // background
-    </section>
-    <section class="fullrow editorial cascade cascade-t4" style="max-width:54ch;line-height:1.4;">
-      <p>I hold a Communication Arts degree from OTIS College of Art and Design and a Google Cybersecurity Professional Certificate. My work currently sits at the intersection of security, automation, decentralized publishing, and creative technical systems.</p>
-      <p>Earlier experience in visual production and television informs the way I approach systems, presentation, documentation, and workflow design.</p>
-    </section>
-
-    <!-- Contact -->
-    <section class="fullrow tight cascade cascade-t4" style="padding-top:24px;line-height:1.4;color:var(--green-dim);">
-      <h3><em><a href="contact.html">Contact</a></em> <span style="position:relative;top:0.2em;margin-left:-0.5em">&#x21B4;</span></h3>
-      <p class="small"><a href="contact.html">Get in touch →</a></p>
-    </section>
+      <section class="fullrow contact-panel cascade cascade-t4" aria-labelledby="contact-title">
+        <h2 id="contact-title">Start a professional conversation</h2>
+        <p>For employment, contract, or collaboration conversations involving technical systems, security, information design, or front-end work, email <a href="mailto:h1t3k@proton.me" data-event="contact_click">h1t3k@proton.me</a>.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="mailto:h1t3k@proton.me?subject=Professional%20conversation" data-event="contact_click">Email Keaton</a>
+          <a class="button" href="https://github.com/h1t3k" target="_blank" rel="me noopener" data-event="profile_visit">GitHub profile</a>
+        </div>
+      </section>
+    </main>
 
     <footer class="center small fullrow cascade cascade-t4">
-      <p>© 2026 k.b.r.<br><span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">visits: …</span></p>
+      <p>© 2026 k.b.r. <span class="footer-sep" aria-hidden="true">·</span> <span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">aggregate visits: …</span></p>
     </footer>
-
   </div>
+
   <script defer src="assets/js/init.js"></script>
-  <script src="assets/js/boot.js"></script>
+  <script defer src="assets/js/boot.js"></script>
 </body>
 </html>

@@ -1,0 +1,54 @@
+{
+  "canonical_origin": "https://h1-t3k.design",
+  "generated_timestamps": false,
+  "pages": [
+    {
+      "path": "index.html",
+      "title": "Home — Keaton Raser",
+      "description": "Keaton Raser designs and documents technical systems across Linux security, on-chain publishing, and information-rich interfaces.",
+      "canonical": "https://h1-t3k.design/",
+      "h1": "Data-minded. Design-led. Security-aware.",
+      "indexing": "index, follow"
+    },
+    {
+      "path": "projects.html",
+      "title": "Projects — Keaton Raser",
+      "description": "Selected project evidence from Keaton Raser: on-chain publishing, Linux interaction, Wazuh monitoring, and encrypted Kali installation.",
+      "canonical": "https://h1-t3k.design/projects.html",
+      "h1": "Projects & systems",
+      "indexing": "index, follow"
+    },
+    {
+      "path": "field-notes.html",
+      "title": "Notes — Keaton Raser",
+      "description": "Technical notes from Keaton Raser on Linux recovery paths, Wazuh monitoring topology, and honest documentation of destructive procedures.",
+      "canonical": "https://h1-t3k.design/field-notes.html",
+      "h1": "Technical notes",
+      "indexing": "index, follow"
+    },
+    {
+      "path": "security-lab.html",
+      "title": "Security Lab — Keaton Raser",
+      "description": "A public evidence map connecting Keaton Raser's Wazuh and Linux repositories to visibility, least privilege, recovery, and safe documentation.",
+      "canonical": "https://h1-t3k.design/security-lab.html",
+      "h1": "Security lab",
+      "indexing": "index, follow"
+    },
+    {
+      "path": "design-archive.html",
+      "title": "Type & Design Archive — Keaton Raser",
+      "description": "Live specimens of the H1-T3K portfolio's bundled type assets and an accurately colored IPFS-backed visual archive.",
+      "canonical": "https://h1-t3k.design/design-archive.html",
+      "h1": "Type & design archive",
+      "indexing": "index, follow"
+    },
+    {
+      "path": "contact.html",
+      "title": "Contact — Keaton Raser",
+      "description": "Contact Keaton Raser in Los Angeles about employment, contracts, or collaboration across technical systems, security, information design, and front-end work.",
+      "canonical": "https://h1-t3k.design/contact.html",
+      "h1": "Contact",
+      "indexing": "index, follow"
+    }
+  ]
+}

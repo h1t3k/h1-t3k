@@ -1,0 +1,99 @@
+{
+  "status": {
+    "source_files": "unavailable",
+    "conversion_pipeline": "unavailable",
+    "authorship": "owner_confirmation_required",
+    "distribution_rights": "owner_confirmation_required",
+    "reproducible_build": false
+  },
+  "assets": [
+    {
+      "path": "fonts/Basenine-Bold.woff2",
+      "family_label": "Basenine",
+      "style": "normal",
+      "weight": 700,
+      "bytes": 15504,
+      "sha256": "c278992b171f3bae068ed59233f5caf92754b86458d04aab8905ec352cdd48f6"
+    },
+    {
+      "path": "fonts/Basenine-BoldItalic.woff2",
+      "family_label": "Basenine",
+      "style": "italic",
+      "weight": 700,
+      "bytes": 16344,
+      "sha256": "82cd3f2dcec5a86781006cc74dddc9bd091c885fb6e8953be4218f76e3bacb58"
+    },
+    {
+      "path": "fonts/Basenine-Italic.woff2",
+      "family_label": "Basenine",
+      "style": "italic",
+      "weight": 400,
+      "bytes": 17436,
+      "sha256": "9783f068f0ce5cb63ee784aef74bcc1ed614be5f67d838c3d59a60a2d8cbbdc7"
+    },
+    {
+      "path": "fonts/Basenine-Regular.woff2",
+      "family_label": "Basenine",
+      "style": "normal",
+      "weight": 400,
+      "bytes": 15728,
+      "sha256": "5a48e2cd217995eed56236c9adeb1ec35298a3ffb26b027fc8c8d10482129352"
+    },
+    {
+      "path": "fonts/DIN2014-Bold.woff2",
+      "family_label": "DIN 2014",
+      "style": "normal",
+      "weight": 700,
+      "bytes": 15008,
+      "sha256": "4b666f36709894f840800502d16a40f435655c3c28fcc878b6fdca324d996a7b"
+    },
+    {
+      "path": "fonts/DIN2014-BoldItalic.woff2",
+      "family_label": "DIN 2014",
+      "style": "italic",
+      "weight": 700,
+      "bytes": 16380,
+      "sha256": "09a1aeab706a767283f67df2cbd9d2b42342969a1914ad02cc5311d54cab05b7"
+    },
+    {
+      "path": "fonts/DIN2014-DemiBold.woff2",
+      "family_label": "DIN 2014",
+      "style": "normal",
+      "weight": 600,
+      "bytes": 15372,
+      "sha256": "d30b0386fc394eee9c501408b8cfe41fc8883274d3c5fbc0c5f3b9a0c9ec9345"
+    },
+    {
+      "path": "fonts/DIN2014-ExtraBold.woff2",
+      "family_label": "DIN 2014",
+      "style": "normal",
+      "weight": 800,
+      "bytes": 14820,
+      "sha256": "3694de877f682c10c3593d4fcbb9f8f24ee644dd20f1734539f486ff19d204e6"
+    },
+    {
+      "path": "fonts/DIN2014-Italic.woff2",
+      "family_label": "DIN 2014",
+      "style": "italic",
+      "weight": 400,
+      "bytes": 16652,
+      "sha256": "59f4b02dc26c143412ee4430b3ff212b4e0d2ba77ccd6f9f4b6676f8e0191eda"
+    },
+    {
+      "path": "fonts/DIN2014-Regular.woff2",
+      "family_label": "DIN 2014",
+      "style": "normal",
+      "weight": 400,
+      "bytes": 14912,
+      "sha256": "0da31962d6fd0722135bd87e773b530f741b4ac5a4efa2c2cb849e3eec3eea50"
+    },
+    {
+      "path": "fonts/monogram.woff2",
+      "family_label": "Monogram",
+      "style": "normal",
+      "weight": 400,
+      "bytes": 660,
+      "sha256": "877782acee095e6a73e39e9cdd24402c3b9ec1efb118dbc223689f88c4f8a4f6"
+    }
+  ]
+}

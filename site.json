@@ -1,22 +1,24 @@
 {
   "site": {
-    "title": "Keaton Raser / h1-t3k"
+    "title": "Keaton Raser / H1-T3K",
+    "positioning": "Design Engineer — technical web experiences",
+    "canonical_origin": "https://h1-t3k.design"
   },
   "nav": [
     {
       "label": "Home",
-      "href": "index.html"
+      "href": "/"
     },
     {
       "label": "Projects",
       "href": "projects.html"
     },
     {
-      "label": "Field Notes",
+      "label": "Notes",
       "href": "field-notes.html"
     },
     {
-      "label": "Design Archive",
+      "label": "Type & Archive",
       "href": "design-archive.html"
     },
     {
@@ -24,19 +26,41 @@
       "href": "contact.html"
     }
   ],
-  "icon_grid": 8,
   "web3": {
-    "url": "web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/"
+    "contract": "0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470",
+    "network": "Arbitrum Nova",
+    "chain_id": 42170,
+    "direct_uri": "web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/",
+    "https_presentation": "https://h1-t3k.design/",
+    "architecture": "on-chain Web3 deployment presented to ordinary browsers through an HTTPS proxy or gateway"
   },
   "analytics": {
     "visitor_counter_enabled": true,
     "visits_endpoint": "/api/visits",
-    "stats_endpoint": "/api/stats",
-    "privacy_mode": "anonymized"
+    "visit_classification": "aggregate_unclassified",
+    "conversion_transport": "local_custom_event_only",
+    "conversion_event_name": "h1t3k:conversion",
+    "boot_event_name": "h1t3k:boot",
+    "allowed_boot_events": [
+      "boot_eligible",
+      "boot_started",
+      "boot_completed",
+      "boot_skipped",
+      "boot_failed_safe"
+    ],
+    "allowed_conversion_events": [
+      "contact_click",
+      "case_study_open",
+      "profile_visit",
+      "resume_open",
+      "typeface_inquiry"
+    ],
+    "free_form_text_collection": false,
+    "specimen_text_collection": false
   },
-  "feeds": {
-    "news": "feeds.json",
-    "devsecops_source": "",
-    "bio_source": ""
+  "release": {
+    "layout": "flat_static_root",
+    "allowlist": "release-files.txt",
+    "generated_timestamps": false
   }
 }

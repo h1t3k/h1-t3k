@@ -1,260 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Field Notes</title>
+<title>Notes — Keaton Raser</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Field notes on security, deployment, and economic reality — install operations, tooling, research, and work opportunities. Plainly written, no fluff.">
-<meta name="keywords" content="security field notes, deployment logs, install operations, deploy hardening, automation tools, gig work, signup bonuses, web3 site">
+<meta name="description" content="Technical notes from Keaton Raser on Linux recovery paths, Wazuh monitoring topology, and honest documentation of destructive procedures.">
+<meta name="bingbot" content="nocache">
+<meta name="theme-color" content="#0d0f0b">
 <link rel="canonical" href="https://h1-t3k.design/field-notes.html">
-<meta property="og:title" content="Field Notes — h1-t3k">
-<meta property="og:description" content="Field notes on security, deployment, tools, and economic reality. Plainly written, no fluff.">
+<meta property="og:title" content="Notes — Keaton Raser">
+<meta property="og:description" content="Repository-backed notes on Linux systems, defensive monitoring, and repeatable technical documentation.">
 <meta property="og:type" content="website">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "url": "https://h1-t3k.design/field-notes.html",
-  "name": "Field Notes — h1-t3k",
-  "description": "Field notes on security, deployment, and economic reality — install operations, tooling, research, and work opportunities. Plainly written, no fluff.",
-  "inLanguage": "en",
-  "keywords": ["research", "operations", "field evidence", "security field notes", "deployment logs", "install operations", "deploy hardening", "automation tools", "gig work", "signup bonuses", "web3 site"],
-  "author": { "@type": "Person", "name": "Keaton Raser", "url": "https://h1-t3k.design/" }
-}
-</script>
+<meta property="og:url" content="https://h1-t3k.design/field-notes.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Notes — Keaton Raser">
+<meta name="twitter:description" content="Repository-backed notes on Linux systems, defensive monitoring, and repeatable technical documentation.">
 <link rel="stylesheet" href="styles/main.css">
 </head>
-<body><script>
-  /** 
-   * Patch by web3url-gateway : Convert web3:// URLs into gateway URLs in various places
-   */
-  (function() {
-
-    // Web3:// URL to Gateway URL convertor
-    const convertWeb3UrlToGatewayUrl = function(web3Url) {
-      // Parse the URL
-      let matchResult = web3Url.match(/^(?<protocol>[^:]+):\/\/(?<hostname>[^:/?]+)(:(?<chainId>[1-9][0-9]*))?(?<path>.*)?$/)
-      if(matchResult == null) {
-        // Invalid web3:// URL
-        return null;
-      }
-      let urlMainParts = matchResult.groups
-  
-      // Check protocol name
-      if(["web3", "w3"].includes(urlMainParts.protocol) == false) {
-        // Bad protocol name"
-        return null;
-      }
-  
-      // Get subdomain components
-      let gateway = window.location.hostname.split('.').slice(-2).join('.') + (window.location.port ? ':' + window.location.port : '');
-      let subDomains = []
-      // Is the contract an ethereum address?
-      if(/^0x[0-9a-fA-F]{40}$/.test(urlMainParts.hostname)) {
-        subDomains.push(urlMainParts.hostname)
-        if(urlMainParts.chainId !== undefined) {
-          subDomains.push(urlMainParts.chainId)
-        }
-        else {
-          subDomains.push(1);
-        }
-      }
-      // It is a domain name
-      else {
-        if(urlMainParts.hostname.endsWith('.eth') && urlMainParts.chainId === undefined) {
-          subDomains.push(urlMainParts.hostname)
-          subDomains.push(1)
-        }
-        else {
-          subDomains.push(urlMainParts.hostname)
-          if(urlMainParts.chainId !== undefined) {
-            subDomains.push(urlMainParts.chainId)
-          }
-        }
-      }
-  
-      let gatewayUrl = window.location.protocol + "//" + subDomains.join(".") + "." + gateway + (urlMainParts.path ?? "")
-      return gatewayUrl;
-    }
-
-
-    // Wrap the fetch() function to convert web3:// URLs into gateway URLs
-    const originalFetch = fetch;
-    fetch = function(input, init) {
-      // Process absolute web3:// URLS: convert them into gateway HTTP URLs
-      if (typeof input === 'string' && input.startsWith('web3://')) {
-        const convertedUrl = convertWeb3UrlToGatewayUrl(input);
-        if(convertedUrl == null) {
-          console.error("Gateway fetch() wrapper: Unable to convert web3:// URL: " + input);
-          return;
-        }
-        console.log('Gateway fetch() wrapper: Converted ' + input + ' to ' + convertedUrl);
-        input = convertedUrl;
-      }
-
-      // Pipe through the original fetch function
-      return originalFetch(input, init);
-    };
-
-
-    // Listen for clicks on <a> tags, and convert web3:// URLs into gateway URLs
-    document.addEventListener('click', function(event) {
-      const closestATag = event.target.closest('a');
-      if(closestATag && closestATag.href.startsWith('web3://')) {
-        event.preventDefault();
-        const targetUrl = closestATag.href;
-        const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
-        if(convertedUrl == null) {
-          console.error("Gateway A tag click wrapper: Unable to convert web3:// URL: " + targetUrl);
-          return;
-        }
-        console.log('Gateway A tag click wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
-        // If the A tag has a target="_blank" attribute, open the URL in a new tab
-        if(closestATag.target === '_blank') {
-          window.open(convertedUrl, '_blank');
-        }
-        else {
-          window.location.href = convertedUrl;
-        }
-      }
-    });
-
-
-    // All tags with a attribute that can get an URL: override the setting of the attribute to convert web3:// URLs into gateway URLs
-    const elementsWithUrlAttr = [
-      {tagName: 'a', attrName: 'href'}, // <a>
-      {tagName: 'link', attrName: 'href'}, // <link>
-      {tagName: 'area', attrName: 'href'}, // <area>
-      {tagName: 'img', attrName: 'src'}, // <img>
-      {tagName: 'script', attrName: 'src'}, // <script>
-      {tagName: 'iframe', attrName: 'src'}, // <iframe>
-      // {tagName: 'audio', attr: 'src'}, // <audio>
-      // {tagName: 'video', attr: 'src'}, // <video>
-      {tagName: 'source', attrName: 'src'}, // <source>
-      {tagName: 'embed', attrName: 'src'}, // <embed>
-      {tagName: 'input', attrName: 'src'}, // <input type="image">
-      {tagName: 'object', attrName: 'data'}, // <object>
-      {tagName: 'image', attrName: 'href'}, // <image> of SVG
-    ];
-    // Override the setter of the attribute to convert web3:// URLs into gateway URLs
-    elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
-      const element = document.createElement(elementWithUrlAttr.tagName);
-      const proto = element.constructor.prototype;
-      const descriptor = Object.getOwnPropertyDescriptor(proto, elementWithUrlAttr.attrName);
-      if (!descriptor || typeof descriptor.set !== 'function') {
-        // Skip if no setter (e.g., SVG <image> 'href')
-        return;
-      }
-      Object.defineProperty(proto, elementWithUrlAttr.attrName, {
-        set: function(attrValue) {
-          if(attrValue && typeof attrValue === 'string' && attrValue.startsWith('web3://')) {
-            const convertedUrl = convertWeb3UrlToGatewayUrl(attrValue);
-            if(convertedUrl == null) {
-              console.error("Gateway " + element.name + " " + elementWithUrlAttr.attrName + " setter wrapper: Unable to convert web3:// URL: " + attrValue);
-              descriptor.set.call(this, attrValue);
-              return;
-            }
-            console.log('Gateway ' + element.name + ' ' + elementWithUrlAttr.attrName + ' setter wrapper: Converted ' + attrValue + ' to ' + convertedUrl);
-            descriptor.set.call(this, convertedUrl);
-          }
-          else {
-            descriptor.set.call(this, attrValue);
-          }
-        }
-      });
-    });
-    // Added nodes to the DOM : convert web3:// URLs into gateway URLs
-    const observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        // Insertion of nodes with the src attribute (img, iframe, audio, ...)
-        if(mutation.type === 'childList') {
-          mutation.addedNodes.forEach(function(addedNode) {
-            // Ignore non-element nodes
-            if(addedNode.nodeType != 1) {
-              return;
-            }
-            // Find all nodes that have a web3:// URL in their attribute as defined in elementsWithUrlAttr
-            elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
-              const nodes = [...addedNode.querySelectorAll(elementWithUrlAttr.tagName + '[' + elementWithUrlAttr.attrName + '^="web3://"]')];
-              // Check if the addedNode itself matches the tag and has the attribute starting with web3://
-              if (
-                addedNode.tagName === elementWithUrlAttr.tagName.toUpperCase() &&
-                typeof addedNode.getAttribute === 'function' &&
-                typeof addedNode.getAttribute(elementWithUrlAttr.attrName) === 'string' &&
-                addedNode.getAttribute(elementWithUrlAttr.attrName).startsWith('web3://')
-              ) {
-                nodes.push(addedNode);
-              }
-              nodes.forEach(function(node) {
-                const targetUrl = node.getAttribute(elementWithUrlAttr.attrName);
-                const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
-                if(convertedUrl == null) {
-                  console.error("Gateway " + node.tagName + " injection wrapper: Unable to convert web3:// URL: " + targetUrl);
-                  return;
-                }
-                console.log('Gateway ' + node.tagName + ' injection wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
-                node.setAttribute(elementWithUrlAttr.attrName, convertedUrl);
-              });
-            });
-          });
-        }
-      });
-    });
-    observer.observe(document.querySelector("body"), {childList: true, subtree: true});
-
-  })();
-</script>
-
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="wrap grid">
     <nav aria-label="Primary">
-      <span class="site-mono" role="img" aria-label="h1-t3k">&oslash;</span>
+      <a class="site-mono" href="/" aria-label="H1-T3K home">&oslash;</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
         <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
       </button>
       <div class="nav-links" id="site-menu">
-        <a href="index.html">Home</a>
+        <a href="/">Home</a>
         <a href="projects.html">Projects</a>
-        <a href="field-notes.html" aria-current="page">Field Notes</a>
-        <a href="design-archive.html">Design Archive</a>
+        <a href="field-notes.html" aria-current="page">Notes</a>
+        <a href="design-archive.html">Type &amp; Archive</a>
         <a href="contact.html">Contact</a>
       </div>
     </nav>
 
-    <header class="page-intro">
-      <h1>Field<br>Notes</h1>
-      <p>Working notes on security, deployment, tools, economic reality, and the decisions that shape an evolving technical practice.</p>
-    </header>
+    <main id="main-content" class="page-grid" tabindex="-1">
+      <header class="page-intro">
+        <h1>Technical<br>notes</h1>
+        <p>Short, repository-backed notes on Linux setup, defensive monitoring, deployment, and repeatable workflows. A note belongs here when it adds evidence to a project or records a decision worth reusing.</p>
+      </header>
 
-    <section class="notice" style="grid-column:auto;">
-      <div class="sys-line"><span class="prompt"></span>ls -t posts/</div>
-    </section>
+      <section class="fullrow notes-list" aria-labelledby="notes-title">
+        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>ls -t notes/</div>
+        <h2 id="notes-title">Evidence before claims</h2>
 
-    <section class="fullrow">
-      <ul class="post-list">
+        <article class="note-record" id="aquarian-note">
+          <div class="post-meta">Linux interaction · least privilege · recovery</div>
+          <h3>Recovery before novelty</h3>
+          <p class="note-lede">A terminal aquarium can be playful; replacing part of a login or lock flow is still a systems change.</p>
+          <p>The Aquarian repository treats recovery as part of the feature. Its documented controls include preflight checks, user-level execution on TTY1, narrowly scoped privileges, an SSH recovery path, a shell fallback, and uninstall steps. The useful pattern is broader than the aquarium: when an interface sits near authentication or session control, the escape route is part of the design.</p>
+          <div class="note-evidence">
+            <strong>Evidence boundary:</strong> this note summarizes the public repository. The implementation was not reinstalled during this portfolio pass.
+          </div>
+          <a class="text-link" href="https://github.com/h1t3k/Aquarian_screensaver" target="_blank" rel="noopener" data-event="case_study_open">Inspect the Aquarian repository →</a>
+        </article>
 
-        <!-- Skip the Interview — referral-supported field guide; published -->
-        <li>
-          <a class="post-item" href="skip-the-interview.html">
-            <div class="post-meta">field guide · work · plasma · rides · invest · 2026</div>
-            <h3>Skip the Interview. Start Earning.</h3>
-            <p>No resume, no interview — paid event and dog-walking work, plasma donation, ride discounts, and crypto/stock signup bonuses, each with a real referral link you can use today.</p>
-            <span class="tag">Referral-supported</span>
-          </a>
-        </li>
+        <article class="note-record" id="wazuh-topology">
+          <div class="post-meta">Wazuh · VirtualBox · host and guest agents</div>
+          <h3>Make the monitoring topology legible</h3>
+          <p class="note-lede">A local security lab becomes easier to debug when the appliance, host, guests, and agent-enrollment paths are documented as separate layers.</p>
+          <p>The Wazuh project records a 4.14.4 OVA in VirtualBox on macOS, resource tuning for the appliance, and enrollment paths for macOS and Debian agents. That separation matters: server reachability, virtual networking, endpoint enrollment, and dashboard access can fail independently, so they should be checked independently.</p>
+          <div class="note-evidence">
+            <strong>Safe-evidence rule:</strong> configuration patterns may be public; working credentials and sensitive endpoint details should not be repeated in portfolio copy.
+          </div>
+          <a class="text-link" href="https://github.com/h1t3k/Wazuh_MacOS-Debian13-agents" target="_blank" rel="noopener" data-event="case_study_open">Inspect the Wazuh repository →</a>
+        </article>
 
-      </ul>
-    </section>
+        <article class="note-record" id="destructive-docs">
+          <div class="post-meta">storage · encryption · installation safety</div>
+          <h3>Destructive instructions need visible risk</h3>
+          <p class="note-lede">A technically complete storage guide is not responsible if the irreversible step is easier to miss than the happy path.</p>
+          <p>The Standalone Kali procedure covers physical-drive selection, BTRFS, LUKS, and boot configuration. Its most important constraint is not a command—it is certainty about the target device. Hardware compatibility is not universal, and a reader must validate the drive, firmware, backups, and current upstream guidance before acting.</p>
+          <div class="note-evidence">
+            <strong>Documented test context:</strong> the repository includes a 2015 Mac context. That is evidence of one setup, not a universal compatibility claim.
+          </div>
+          <a class="text-link" href="https://github.com/h1t3k/Standalone_Kali-Linux" target="_blank" rel="noopener" data-event="case_study_open">Inspect the installation repository →</a>
+        </article>
+      </section>
 
-    <section class="fullrow">
-      <div class="disclaimer">
-        <strong>Disclosure:</strong> Some posts include referral or signup links. When used, they help support the project at no extra cost to the reader. I only include tools or services that are relevant to the build, deployment, or research process.
-      </div>
-    </section>
+      <section class="fullrow contact-panel" aria-labelledby="notes-next">
+        <h2 id="notes-next">Continue through the evidence</h2>
+        <p>The <a href="security-lab.html">Security Lab</a> maps these repositories to visibility, least privilege, recovery, and safe-documentation questions. The <a href="projects.html">Projects page</a> provides the selected-work overview.</p>
+      </section>
+    </main>
 
     <footer class="center small fullrow">
-      <p>© 2026 k.b.r.<br><span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">visits: …</span></p>
+      <p>© 2026 k.b.r. <span class="footer-sep" aria-hidden="true">·</span> <span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">aggregate visits: …</span></p>
     </footer>
-
   </div>
   <script defer src="assets/js/init.js"></script>
 </body>

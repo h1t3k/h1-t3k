@@ -1,144 +1,185 @@
-/* ════════════════════════════════════════════════════════════
-   COLD BOOT — deterministic timeline (index.html only)
-   Companions: the inline gate script in index.html <head> and
-   the "BOOT" section in styles/main.css.
-   Spec: intro-cold-boot-spec.md v2026.1.
-   Every event fires at an absolute millisecond offset computed
-   from the BOOT config below. Same input → same output, always.
-   ════════════════════════════════════════════════════════════ */
-const BOOT = {
-  storageKey: 'ht_boot_v1',
-
-  /* THE MONOGRAM — real 'Monogram' face (fonts/monogram.woff2,
-     ported from the retired matrix gate).
-     \u00F8 = site-theme variant (in use); \uE000 = literal form. */
-  monogramChar: '\u00F8',
-
-  /* Login-line text, decoupled from monogramChar so the manifest
-     copy stays exact per spec §5 (`login: ht ▊`). */
-  loginText: 'ht',
-
-  /* BOOT MANIFEST — the copy IS the site map. Rule: one `mount`
-     line per nav section, in site.json nav order. Add a page →
-     add a mount line. Contact is `link`, not `mount`. */
-  lines: [
-    { l: 'ht/os v2026.1 — cold boot', ok: false, head: true },
-    { l: 'palette ......... grass/sands', ok: true },
-    { l: 'type ....... din2014/basenine', ok: true },
-    { l: 'mount /projects .............', ok: true },
-    { l: 'mount /security-lab .........', ok: true },
-    { l: 'mount /field-notes ..........', ok: true },
-    { l: 'mount /design-archive .......', ok: true },
-    { l: 'link /contact ...............', ok: true }
-  ],
-
-  /* TIMINGS (ms) — accelerating gaps: caches warm as a system
-     boots. Spec-locked values; do not tune. */
-  cursorHold: 380,                          /* lone cursor before line 1  */
-  gaps: [150, 130, 112, 96, 84, 74, 66, 60],/* line n appears gap[n] after line n-1 */
-  okDelay: 70,                              /* [ok] stamps after its line */
-  loginHold: 300,                           /* login: ht ▊ rest           */
-  wipe: 120,                                /* log fade                   */
-  warmSteps: [80, 80, 80],                  /* phosphor: .12→.42→.74→1    */
-  glowDelay: 60,                            /* bloom after full opacity   */
-  sweepDur: 400,                            /* raster pass                */
-  hold: 260,                                /* monogram rest              */
-  exitFade: 240                             /* overlay out                */
-};
-
+/*
+  Redirect-qualified homepage introduction.
+  Eligibility is decided synchronously in index.html before CSS loads.
+  This file executes only the ELIGIBLE -> RUNNING -> terminal state path.
+*/
 (function () {
+  "use strict";
+
   const html = document.documentElement;
-  const isBoot   = html.classList.contains('booting');
-  const isBootRM = html.classList.contains('booting-rm');
-  if (!isBoot && !isBootRM) return;         /* repeat visit: nothing runs */
+  const bootState = window.__H1_BOOT__;
+  if (!bootState || bootState.state !== "ELIGIBLE") return;
 
-  const boot  = document.getElementById('boot');
-  const log   = document.getElementById('bootLog');
-  const stage = document.getElementById('monoStage');
-  const mono  = document.getElementById('monogram');
-  const sweep = document.getElementById('sweep');
-  const timers = [];
-  let finished = false;
+  const boot = document.getElementById("boot");
+  const log = document.getElementById("bootLog");
+  const stage = document.getElementById("monoStage");
+  const mono = document.getElementById("monogram");
+  const sweep = document.getElementById("sweep");
+  const skip = document.getElementById("bootSkip");
+  const main = document.getElementById("main-content");
 
-  /* Monogram: the markup ships the DIN 'ht' stand-in; swap to the
-     real glyph the moment the face is ready. The clock-driven
-     timeline never waits on this (spec §3.2) — if the font 404s,
-     the stand-in simply remains (spec QA: no empty stage). */
-  if (document.fonts && document.fonts.load) {
-    document.fonts.load("1em 'Monogram'")
-      .then(function (faces) {
-        if (faces && faces.length) mono.childNodes[0].nodeValue = BOOT.monogramChar;
-      })
-      .catch(function () {});
-  }
-
-  function at(t, fn) { timers.push(setTimeout(fn, t)); }
-
-  function finish() {
-    if (finished) return;
-    finished = true;
-    timers.forEach(clearTimeout);
-    boot.classList.add('exit');
-    html.classList.add('boot-done', 'did-boot');
-    setTimeout(() => { boot.remove(); }, BOOT.exitFade + 20);
-    window.removeEventListener('pointerdown', finish);
-    window.removeEventListener('keydown', finish);
-  }
-  window.addEventListener('pointerdown', finish);
-  window.addEventListener('keydown', finish);
-
-  /* ── REDUCED MOTION: static monogram, opacity only, 650ms total ── */
-  if (isBootRM) {
-    mono.classList.add('w3', 'glow');
-    stage.style.transition = 'opacity 150ms linear';
-    stage.classList.add('on');
-    at(500, finish);
+  const required = [boot, log, stage, mono, sweep, skip];
+  if (required.some((node) => !node)) {
+    html.classList.remove("booting", "booting-rm");
+    html.classList.add("boot-done");
+    bootState.state = "FAILED_SAFE";
+    window.clearTimeout(window.__H1_BOOT_WATCHDOG__);
+    window.dispatchEvent(new CustomEvent("h1t3k:boot", {
+      detail: { name: "boot_failed_safe" }
+    }));
     return;
   }
 
-  /* ── FULL SEQUENCE — build absolute schedule from config ── */
-  let t = BOOT.cursorHold;
+  const config = {
+    monogram: "\u00F8",
+    cursorHold: 180,
+    gaps: [120, 110, 100, 90, 80, 70, 60],
+    okDelay: 50,
+    loginHold: 180,
+    wipe: 100,
+    warmSteps: [70, 70, 70],
+    glowDelay: 50,
+    sweepDuration: 320,
+    hold: 180,
+    exitFade: 220,
+    lines: [
+      { text: "ht/os — verified entry", heading: true },
+      { text: "palette ......... grass/sands", ok: true },
+      { text: "type ....... din2014/basenine", ok: true },
+      { text: "mount /projects .............", ok: true },
+      { text: "mount /field-notes ..........", ok: true },
+      { text: "mount /design-archive .......", ok: true },
+      { text: "link /contact ...............", ok: true }
+    ]
+  };
 
-  /* lone cursor on an empty log line */
-  const cur = document.createElement('div');
-  cur.className = 'bl on';
-  cur.innerHTML = '<span><span class="cursor"></span></span>';
-  log.appendChild(cur);
+  const timers = [];
+  let finished = false;
 
-  /* boot lines */
-  BOOT.lines.forEach((line, i) => {
-    t += BOOT.gaps[i] || 60;
-    const el = document.createElement('div');
-    el.className = 'bl' + (line.head ? ' bl-head' : '');
-    el.innerHTML = '<span>' + line.l + '</span>' +
-                   (line.ok ? '<span class="ok">ok</span>' : '');
-    log.appendChild(el);
-    const tt = t;
-    at(tt, () => { cur.remove(); el.classList.add('on'); });
-    if (line.ok) at(tt + BOOT.okDelay,
-      () => el.querySelector('.ok').classList.add('on'));
+  function emit(state, name) {
+    bootState.state = state;
+    window.dispatchEvent(new CustomEvent("h1t3k:boot", {
+      detail: { name }
+    }));
+  }
+
+  function at(delay, task) {
+    timers.push(window.setTimeout(task, delay));
+  }
+
+  function finish(state, eventName) {
+    if (finished) return;
+    finished = true;
+    timers.forEach(window.clearTimeout);
+    window.clearTimeout(window.__H1_BOOT_WATCHDOG__);
+    window.removeEventListener("keydown", onKeydown);
+    skip.removeEventListener("click", onSkip);
+
+    try {
+      sessionStorage.setItem(bootState.key, "1");
+    } catch (error) {
+      /* Storage is optional; the redirect marker has already been removed. */
+    }
+
+    emit(state, eventName);
+    boot.classList.add("exit");
+    html.classList.remove("booting", "booting-rm");
+    html.classList.add("boot-done", "did-boot");
+
+    window.setTimeout(function () {
+      boot.remove();
+      if (state === "SKIPPED" && main) main.focus({ preventScroll: true });
+    }, config.exitFade + 20);
+  }
+
+  function onSkip() {
+    finish("SKIPPED", "boot_skipped");
+  }
+
+  function onKeydown(event) {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    event.preventDefault();
+    finish("SKIPPED", "boot_skipped");
+  }
+
+  skip.addEventListener("click", onSkip);
+  window.addEventListener("keydown", onKeydown);
+  skip.focus({ preventScroll: true });
+  emit("RUNNING", "boot_started");
+
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load("1em Monogram").then(function (faces) {
+      if (faces && faces.length && mono.firstChild) {
+        mono.firstChild.nodeValue = config.monogram;
+      }
+    }).catch(function () {
+      /* The visible ht fallback remains. */
+    });
+  }
+
+  if (bootState.reduced) {
+    mono.classList.add("w3", "glow");
+    stage.classList.add("on");
+    at(420, function () { finish("COMPLETE", "boot_completed"); });
+    return;
+  }
+
+  let elapsed = config.cursorHold;
+  const cursorLine = document.createElement("div");
+  cursorLine.className = "bl on";
+  cursorLine.innerHTML = "<span><span class=\"cursor\"></span></span>";
+  log.appendChild(cursorLine);
+
+  config.lines.forEach(function (line, index) {
+    elapsed += config.gaps[index] || 60;
+    const row = document.createElement("div");
+    row.className = "bl" + (line.heading ? " bl-head" : "");
+
+    const text = document.createElement("span");
+    text.textContent = line.text;
+    row.appendChild(text);
+
+    let ok = null;
+    if (line.ok) {
+      ok = document.createElement("span");
+      ok.className = "ok";
+      ok.textContent = "ok";
+      row.appendChild(ok);
+    }
+
+    log.appendChild(row);
+    const rowTime = elapsed;
+    at(rowTime, function () {
+      cursorLine.remove();
+      row.classList.add("on");
+    });
+    if (ok) {
+      at(rowTime + config.okDelay, function () { ok.classList.add("on"); });
+    }
   });
 
-  /* login line — loginText, NOT monogramChar (manifest copy is exact) */
-  t += 70;
-  const login = document.createElement('div');
-  login.className = 'bl';
-  login.innerHTML = '<span>login: ' + BOOT.loginText +
-                    '<span class="cursor"></span></span>';
+  elapsed += 70;
+  const login = document.createElement("div");
+  login.className = "bl";
+  login.innerHTML = "<span>login: ht<span class=\"cursor\"></span></span>";
   log.appendChild(login);
-  at(t, () => login.classList.add('on'));
-  t += BOOT.loginHold;
+  at(elapsed, function () { login.classList.add("on"); });
+  elapsed += config.loginHold;
 
-  /* wipe log → monogram warm-up → bloom → sweep → hold → exit */
-  at(t, () => log.classList.add('wipe'));
-  t += BOOT.wipe;
-  at(t, () => stage.classList.add('on'));
-  t += BOOT.warmSteps[0]; at(t, () => mono.classList.add('w1'));
-  t += BOOT.warmSteps[1]; at(t, () => mono.classList.add('w2'));
-  t += BOOT.warmSteps[2]; at(t, () => mono.classList.add('w3'));
-  t += BOOT.glowDelay;
-  at(t, () => { mono.classList.add('glow'); sweep.classList.add('run'); });
-  t += BOOT.sweepDur + BOOT.hold;
-  at(t, finish);
-  /* hard-capped by construction — clock-driven, no network dependency */
+  at(elapsed, function () { log.classList.add("wipe"); });
+  elapsed += config.wipe;
+  at(elapsed, function () { stage.classList.add("on"); });
+  elapsed += config.warmSteps[0];
+  at(elapsed, function () { mono.classList.add("w1"); });
+  elapsed += config.warmSteps[1];
+  at(elapsed, function () { mono.classList.add("w2"); });
+  elapsed += config.warmSteps[2];
+  at(elapsed, function () { mono.classList.add("w3"); });
+  elapsed += config.glowDelay;
+  at(elapsed, function () {
+    mono.classList.add("glow");
+    sweep.classList.add("run");
+  });
+  elapsed += config.sweepDuration + config.hold;
+  at(elapsed, function () { finish("COMPLETE", "boot_completed"); });
 })();

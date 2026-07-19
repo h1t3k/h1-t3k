@@ -1,148 +1,107 @@
 {
+  "provenance": {
+    "source": "approved baseline metadata",
+    "authorship_status": "owner_confirmation_required",
+    "context_status": "owner_confirmation_required",
+    "asset_host": "Pinata HTTPS IPFS gateway",
+    "cid": "bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi"
+  },
   "works": [
     {
       "id": "work-01",
       "title": "CYF CONC 01",
       "year": 2022,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-01.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-01.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-01.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-01.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-01.png"
     },
     {
       "id": "work-02",
       "title": "CYF CONC 02",
       "year": 2022,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-02.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-02.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-02.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-02.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-02.png"
     },
     {
       "id": "work-03",
       "title": "CYF CONC 03",
       "year": 2022,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-03.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-03.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-03.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-03.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-03.png"
     },
     {
       "id": "work-04",
       "title": "CYF CONC 04",
       "year": 2022,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-04.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-04.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-04.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-04.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-04.png"
     },
     {
       "id": "work-05",
       "title": "CYF CONC 05",
       "year": 2022,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-05.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-05.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-05.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-05.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-05.png"
     },
     {
       "id": "work-06",
       "title": "CYF CONC 06",
       "year": 2022,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-06.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-06.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-06.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2022-CYF-CONC-06.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2022-CYF-CONC-06.png"
     },
     {
       "id": "work-07",
       "title": "Darkside",
       "year": 2012,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2012-darkside.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2012-darkside.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2012-darkside.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2012-darkside.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2012-darkside.png"
     },
     {
       "id": "work-08",
       "title": "Science",
       "year": 2012,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2012-science.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2012-science.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2012-science.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2012-science.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2012-science.png"
     },
     {
       "id": "work-09",
       "title": "Atomilk",
       "year": 2011,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2011-atomilk.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2011-atomilk.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2011-atomilk.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2011-atomilk.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2011-atomilk.png"
     },
     {
       "id": "work-10",
       "title": "Vedar",
       "year": 2011,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2011-vedar.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2011-vedar.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2011-vedar.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2011-vedar.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2011-vedar.png"
     },
     {
       "id": "work-11",
       "title": "Ischure",
       "year": 2010,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2010-ischure.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2010-ischure.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2010-ischure.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2010-ischure.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2010-ischure.png"
     },
     {
       "id": "work-12",
       "title": "Raser",
       "year": 2009,
       "medium": "Digital",
-      "description": "Archive gallery work.",
-      "images": {
-        "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2009-raser.png",
-        "popup": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2009-raser.png",
-        "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2009-raser.png"
-      }
+      "thumb": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/thumbnails/2009-raser.png",
+      "full": "https://gateway.pinata.cloud/ipfs/bafybeih274pv4bt4begazt4ylc63l6vpkkh3zd4kz3fclgliya2d2v2dmi/2009-raser.png"
     }
   ]
 }

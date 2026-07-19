@@ -1,334 +1,159 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Projects</title>
+<title>Projects — Keaton Raser</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Proof of work: web3 portfolio deployment, agentic automation systems, a security monitoring lab, and an IPFS visual archive. Security-minded, decentralized, in progress.">
-<meta name="keywords" content="web3 portfolio, decentralized publishing, agentic automation, security monitoring lab, linux hardening, ipfs gallery, technical portfolio">
+<meta name="description" content="Selected project evidence from Keaton Raser: on-chain publishing, Linux interaction, Wazuh monitoring, and encrypted Kali installation.">
+<meta name="bingbot" content="nocache">
+<meta name="theme-color" content="#0d0f0b">
 <link rel="canonical" href="https://h1-t3k.design/projects.html">
-<meta property="og:title" content="Projects — h1-t3k">
-<meta property="og:description" content="Web3 publishing, automation workflows, security monitoring, and visual systems.">
+<meta property="og:title" content="Projects — Keaton Raser">
+<meta property="og:description" content="Selected evidence across on-chain publishing, Linux systems, and defensive monitoring.">
 <meta property="og:type" content="website">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "url": "https://h1-t3k.design/projects.html",
-  "name": "Projects & Systems — h1-t3k",
-  "description": "Proof of work: web3 portfolio deployment, agentic automation systems, a security monitoring lab, and an IPFS visual archive. Security-minded, decentralized, in progress.",
-  "inLanguage": "en",
-  "keywords": ["proof of work", "active practice", "web3 portfolio", "decentralized publishing", "agentic automation", "security monitoring lab", "linux hardening", "ipfs gallery", "technical portfolio"],
-  "author": { "@type": "Person", "name": "Keaton Raser", "url": "https://h1-t3k.design/" }
-}
-</script>
+<meta property="og:url" content="https://h1-t3k.design/projects.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Projects — Keaton Raser">
+<meta name="twitter:description" content="Selected evidence across on-chain publishing, Linux systems, and defensive monitoring.">
 <link rel="stylesheet" href="styles/main.css">
 </head>
-<body><script>
-  /** 
-   * Patch by web3url-gateway : Convert web3:// URLs into gateway URLs in various places
-   */
-  (function() {
-
-    // Web3:// URL to Gateway URL convertor
-    const convertWeb3UrlToGatewayUrl = function(web3Url) {
-      // Parse the URL
-      let matchResult = web3Url.match(/^(?<protocol>[^:]+):\/\/(?<hostname>[^:/?]+)(:(?<chainId>[1-9][0-9]*))?(?<path>.*)?$/)
-      if(matchResult == null) {
-        // Invalid web3:// URL
-        return null;
-      }
-      let urlMainParts = matchResult.groups
-  
-      // Check protocol name
-      if(["web3", "w3"].includes(urlMainParts.protocol) == false) {
-        // Bad protocol name"
-        return null;
-      }
-  
-      // Get subdomain components
-      let gateway = window.location.hostname.split('.').slice(-2).join('.') + (window.location.port ? ':' + window.location.port : '');
-      let subDomains = []
-      // Is the contract an ethereum address?
-      if(/^0x[0-9a-fA-F]{40}$/.test(urlMainParts.hostname)) {
-        subDomains.push(urlMainParts.hostname)
-        if(urlMainParts.chainId !== undefined) {
-          subDomains.push(urlMainParts.chainId)
-        }
-        else {
-          subDomains.push(1);
-        }
-      }
-      // It is a domain name
-      else {
-        if(urlMainParts.hostname.endsWith('.eth') && urlMainParts.chainId === undefined) {
-          subDomains.push(urlMainParts.hostname)
-          subDomains.push(1)
-        }
-        else {
-          subDomains.push(urlMainParts.hostname)
-          if(urlMainParts.chainId !== undefined) {
-            subDomains.push(urlMainParts.chainId)
-          }
-        }
-      }
-  
-      let gatewayUrl = window.location.protocol + "//" + subDomains.join(".") + "." + gateway + (urlMainParts.path ?? "")
-      return gatewayUrl;
-    }
-
-
-    // Wrap the fetch() function to convert web3:// URLs into gateway URLs
-    const originalFetch = fetch;
-    fetch = function(input, init) {
-      // Process absolute web3:// URLS: convert them into gateway HTTP URLs
-      if (typeof input === 'string' && input.startsWith('web3://')) {
-        const convertedUrl = convertWeb3UrlToGatewayUrl(input);
-        if(convertedUrl == null) {
-          console.error("Gateway fetch() wrapper: Unable to convert web3:// URL: " + input);
-          return;
-        }
-        console.log('Gateway fetch() wrapper: Converted ' + input + ' to ' + convertedUrl);
-        input = convertedUrl;
-      }
-
-      // Pipe through the original fetch function
-      return originalFetch(input, init);
-    };
-
-
-    // Listen for clicks on <a> tags, and convert web3:// URLs into gateway URLs
-    document.addEventListener('click', function(event) {
-      const closestATag = event.target.closest('a');
-      if(closestATag && closestATag.href.startsWith('web3://')) {
-        event.preventDefault();
-        const targetUrl = closestATag.href;
-        const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
-        if(convertedUrl == null) {
-          console.error("Gateway A tag click wrapper: Unable to convert web3:// URL: " + targetUrl);
-          return;
-        }
-        console.log('Gateway A tag click wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
-        // If the A tag has a target="_blank" attribute, open the URL in a new tab
-        if(closestATag.target === '_blank') {
-          window.open(convertedUrl, '_blank');
-        }
-        else {
-          window.location.href = convertedUrl;
-        }
-      }
-    });
-
-
-    // All tags with a attribute that can get an URL: override the setting of the attribute to convert web3:// URLs into gateway URLs
-    const elementsWithUrlAttr = [
-      {tagName: 'a', attrName: 'href'}, // <a>
-      {tagName: 'link', attrName: 'href'}, // <link>
-      {tagName: 'area', attrName: 'href'}, // <area>
-      {tagName: 'img', attrName: 'src'}, // <img>
-      {tagName: 'script', attrName: 'src'}, // <script>
-      {tagName: 'iframe', attrName: 'src'}, // <iframe>
-      // {tagName: 'audio', attr: 'src'}, // <audio>
-      // {tagName: 'video', attr: 'src'}, // <video>
-      {tagName: 'source', attrName: 'src'}, // <source>
-      {tagName: 'embed', attrName: 'src'}, // <embed>
-      {tagName: 'input', attrName: 'src'}, // <input type="image">
-      {tagName: 'object', attrName: 'data'}, // <object>
-      {tagName: 'image', attrName: 'href'}, // <image> of SVG
-    ];
-    // Override the setter of the attribute to convert web3:// URLs into gateway URLs
-    elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
-      const element = document.createElement(elementWithUrlAttr.tagName);
-      const proto = element.constructor.prototype;
-      const descriptor = Object.getOwnPropertyDescriptor(proto, elementWithUrlAttr.attrName);
-      if (!descriptor || typeof descriptor.set !== 'function') {
-        // Skip if no setter (e.g., SVG <image> 'href')
-        return;
-      }
-      Object.defineProperty(proto, elementWithUrlAttr.attrName, {
-        set: function(attrValue) {
-          if(attrValue && typeof attrValue === 'string' && attrValue.startsWith('web3://')) {
-            const convertedUrl = convertWeb3UrlToGatewayUrl(attrValue);
-            if(convertedUrl == null) {
-              console.error("Gateway " + element.name + " " + elementWithUrlAttr.attrName + " setter wrapper: Unable to convert web3:// URL: " + attrValue);
-              descriptor.set.call(this, attrValue);
-              return;
-            }
-            console.log('Gateway ' + element.name + ' ' + elementWithUrlAttr.attrName + ' setter wrapper: Converted ' + attrValue + ' to ' + convertedUrl);
-            descriptor.set.call(this, convertedUrl);
-          }
-          else {
-            descriptor.set.call(this, attrValue);
-          }
-        }
-      });
-    });
-    // Added nodes to the DOM : convert web3:// URLs into gateway URLs
-    const observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        // Insertion of nodes with the src attribute (img, iframe, audio, ...)
-        if(mutation.type === 'childList') {
-          mutation.addedNodes.forEach(function(addedNode) {
-            // Ignore non-element nodes
-            if(addedNode.nodeType != 1) {
-              return;
-            }
-            // Find all nodes that have a web3:// URL in their attribute as defined in elementsWithUrlAttr
-            elementsWithUrlAttr.forEach(function(elementWithUrlAttr) {
-              const nodes = [...addedNode.querySelectorAll(elementWithUrlAttr.tagName + '[' + elementWithUrlAttr.attrName + '^="web3://"]')];
-              // Check if the addedNode itself matches the tag and has the attribute starting with web3://
-              if (
-                addedNode.tagName === elementWithUrlAttr.tagName.toUpperCase() &&
-                typeof addedNode.getAttribute === 'function' &&
-                typeof addedNode.getAttribute(elementWithUrlAttr.attrName) === 'string' &&
-                addedNode.getAttribute(elementWithUrlAttr.attrName).startsWith('web3://')
-              ) {
-                nodes.push(addedNode);
-              }
-              nodes.forEach(function(node) {
-                const targetUrl = node.getAttribute(elementWithUrlAttr.attrName);
-                const convertedUrl = convertWeb3UrlToGatewayUrl(targetUrl);
-                if(convertedUrl == null) {
-                  console.error("Gateway " + node.tagName + " injection wrapper: Unable to convert web3:// URL: " + targetUrl);
-                  return;
-                }
-                console.log('Gateway ' + node.tagName + ' injection wrapper: Converted ' + targetUrl + ' to ' + convertedUrl);
-                node.setAttribute(elementWithUrlAttr.attrName, convertedUrl);
-              });
-            });
-          });
-        }
-      });
-    });
-    observer.observe(document.querySelector("body"), {childList: true, subtree: true});
-
-  })();
-</script>
-
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="wrap grid">
     <nav aria-label="Primary">
-      <span class="site-mono" role="img" aria-label="h1-t3k">&oslash;</span>
+      <a class="site-mono" href="/" aria-label="H1-T3K home">&oslash;</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
         <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
       </button>
       <div class="nav-links" id="site-menu">
-        <a href="index.html">Home</a>
+        <a href="/">Home</a>
         <a href="projects.html" aria-current="page">Projects</a>
-        <a href="field-notes.html">Field Notes</a>
-        <a href="design-archive.html">Design Archive</a>
+        <a href="field-notes.html">Notes</a>
+        <a href="design-archive.html">Type &amp; Archive</a>
         <a href="contact.html">Contact</a>
       </div>
     </nav>
 
-    <header class="page-intro">
-      <h1>Projects &amp;<br>Systems</h1>
-      <p>Technical experiments and visual systems presented as evidence: what changed, what remains human-reviewed, and what the work is becoming.</p>
-    </header>
+    <main id="main-content" class="page-grid" tabindex="-1">
+      <header class="page-intro">
+        <h1>Projects &amp;<br>systems</h1>
+        <p>Four selected projects show how I approach deployment, Linux systems, monitoring, and interaction design. Each entry names the constraint, decisions recorded in the evidence, current status, and limits of what has been verified.</p>
+      </header>
 
-    <section class="notice" style="grid-column:auto;">
-      <div class="sys-line"><span class="prompt"></span>ls -t projects/</div>
-    </section>
-
-    <section class="fullrow editorial" style="max-width:60ch;line-height:1.45;">
-      <p>Proof of work and active practice across decentralized publishing, automation, security infrastructure, information design, and creative technology.</p>
-    </section>
-
-    <section class="fullrow">
-      <div class="project-flow-layout">
+      <section class="fullrow project-flow-layout" aria-labelledby="selected-projects">
         <header class="project-flow-rail">
-          <p data-project-summary>Nine connected tracks. Scroll for scope, current state, and the next layer of evidence.</p>
+          <div class="sys-line" aria-hidden="true"><span class="prompt"></span>ls selected-work/</div>
+          <h2 id="selected-projects">Selected evidence</h2>
+          <p data-project-summary>Four project records. Scroll for constraints, decisions, status, and source links.</p>
         </header>
-      <ul class="post-list project-flow" aria-label="Selected project tracks">
 
-        <li>
-          <a class="post-item" href="https://github.com/h1t3k/Aquarian_screensaver" target="_blank" rel="noopener">
-            <div class="post-meta">linux · interaction · creative technology</div>
-            <h3>Aquarian Terminal Screensaver</h3>
-            <p>A Debian/Linux terminal aquarium that reshapes the lock-screen flow with preflight checks, scoped privileges, SSH recovery, and GNOME idle integration.</p>
-            <span class="tag">View repository →</span>
-          </a>
-        </li>
+        <ol class="project-flow" aria-label="Selected projects">
+          <li id="web3-portfolio">
+            <article class="project-record">
+              <div class="post-meta">publishing systems · Arbitrum Nova · runtime verified</div>
+              <h2>On-chain Web3 portfolio</h2>
+              <p class="project-summary">A contract-backed static portfolio presented to ordinary browsers through an HTTPS proxy or gateway.</p>
+              <dl class="project-facts">
+                <div><dt>Constraint</dt><dd>Keep origin, gateway transformation, browser presentation, and editable source provenance distinct.</dd></div>
+                <div><dt>Decisions evidenced</dt><dd>Static HTML, CSS, and small JavaScript; explicit contract and chain identifiers; normalized source comparisons; deterministic file manifests.</dd></div>
+                <div><dt>Contribution boundary</dt><dd>This is Keaton’s portfolio and owner-approved editable source. The exact source revision deployed at runtime is not proven.</dd></div>
+                <div><dt>Status</dt><dd>HTTPS and read-only contract retrieval are verified. Native Web3 browser parity and an exact deployed Git commit are not proven.</dd></div>
+              </dl>
+              <div class="project-actions">
+                <a class="button button-primary" href="https://h1-t3k.design/" data-event="case_study_open">Open HTTPS presentation</a>
+                <a class="button" href="web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/" data-event="case_study_open">Open direct Web3 route</a>
+              </div>
+              <p class="evidence-note"><strong>Runtime identifier:</strong> <code>web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/</code></p>
+            </article>
+          </li>
 
-        <li>
-          <a class="post-item" href="https://github.com/h1t3k/Bare-Metal_Virtualized" target="_blank" rel="noopener">
-            <div class="post-meta">virtualization · macos · storage</div>
-            <h3>Bare-Metal Virtualized</h3>
-            <p>Commands for using external disks as host-side, space-saving storage for VirtualBox virtual machines on macOS.</p>
-            <span class="tag">View repository →</span>
-          </a>
-        </li>
+          <li id="aquarian">
+            <article class="project-record">
+              <div class="post-meta">Linux · interaction · recovery-aware</div>
+              <h2>Aquarian terminal screensaver</h2>
+              <p class="project-summary">Aquarian is an intentionally named Debian/Linux terminal aquarium that replaces part of the login or lock flow without treating recovery as an afterthought.</p>
+              <dl class="project-facts">
+                <div><dt>Constraint</dt><dd>Integrate a visual terminal experience with desktop idle behavior while preserving shell and remote-recovery paths.</dd></div>
+                <div><dt>Decisions evidenced</dt><dd>Preflight checks, user-level TTY execution, narrowly scoped sudo rules, GNOME D-Bus idle integration, SSH recovery, and an uninstall path.</dd></div>
+                <div><dt>Contribution boundary</dt><dd>Presented from Keaton’s public h1t3k repository. Collaborator history and an independent installation run were not established in this pass.</dd></div>
+                <div><dt>Status</dt><dd>The public repository documents installation and recovery. This portfolio pass reviewed the repository; it did not independently install the system.</dd></div>
+              </dl>
+              <div class="project-actions">
+                <a class="button button-primary" href="https://github.com/h1t3k/Aquarian_screensaver" target="_blank" rel="noopener" data-event="case_study_open">View repository</a>
+                <a class="button" href="field-notes.html#aquarian-note" data-event="case_study_open">Read the technical note</a>
+              </div>
+            </article>
+          </li>
 
-        <li>
-          <a class="post-item" href="https://github.com/h1t3k/Debian-kernel_realtek-driver_update" target="_blank" rel="noopener">
-            <div class="post-meta">linux · kernel · drivers</div>
-            <h3>Debian Realtek Driver Update</h3>
-            <p>Kernel-header update instructions for building and installing a Realtek Wi-Fi driver on Debian.</p>
-            <span class="tag">View repository →</span>
-          </a>
-        </li>
+          <li id="wazuh">
+            <article class="project-record">
+              <div class="post-meta">defensive monitoring · virtualization · agents</div>
+              <h2>Wazuh lab topology</h2>
+              <p class="project-summary">A Wazuh 4.14.4 OVA in VirtualBox on macOS, with agent enrollment documented for the host and Debian guests.</p>
+              <dl class="project-facts">
+                <div><dt>Constraint</dt><dd>Stand up a useful monitoring topology on local hardware while keeping host, appliance, and guest networking understandable.</dd></div>
+                <div><dt>Decisions evidenced</dt><dd>Resource tuning, network setup, server access, and separate macOS and Debian agent-enrollment procedures.</dd></div>
+                <div><dt>Contribution boundary</dt><dd>Presented from Keaton’s public h1t3k repository. Collaborator history and an independent lab reproduction were not established in this pass.</dd></div>
+                <div><dt>Status</dt><dd>The public repository is inspectable. Credentials shown in upstream lab documentation are intentionally not repeated here.</dd></div>
+              </dl>
+              <div class="project-actions">
+                <a class="button button-primary" href="https://github.com/h1t3k/Wazuh_MacOS-Debian13-agents" target="_blank" rel="noopener" data-event="case_study_open">View repository</a>
+                <a class="button" href="security-lab.html#wazuh-evidence" data-event="case_study_open">Open evidence map</a>
+              </div>
+            </article>
+          </li>
 
-        <li>
-          <a class="post-item" href="https://github.com/h1t3k/Standalone_Kali-Linux" target="_blank" rel="noopener">
-            <div class="post-meta">security · linux · tooling</div>
-            <h3>Standalone Kali Linux</h3>
-            <p>A guide that produces a fully encrypted, universally bootable copy of Kali Linux you can run across machines.</p>
-            <span class="tag">View repository →</span>
-          </a>
-        </li>
+          <li id="standalone-kali">
+            <article class="project-record">
+              <div class="post-meta">Linux · encrypted storage · destructive procedure</div>
+              <h2>Standalone Kali Linux</h2>
+              <p class="project-summary">A detailed installation path for an encrypted Kali system on an external drive, with BTRFS, LUKS, and bootloader steps.</p>
+              <dl class="project-facts">
+                <div><dt>Constraint</dt><dd>Document a portable external installation without hiding the risk of selecting or repartitioning the wrong physical disk.</dd></div>
+                <div><dt>Decisions evidenced</dt><dd>Explicit device inspection, encrypted storage, boot configuration, recovery-minded warnings, and a documented 2015 Mac test context.</dd></div>
+                <div><dt>Contribution boundary</dt><dd>Presented from Keaton’s public h1t3k repository. Collaborator history and a current hardware reproduction were not established in this pass.</dd></div>
+                <div><dt>Status</dt><dd>The procedure is repository-backed but hardware compatibility is not universal. Readers must validate devices, firmware, backups, and current upstream guidance.</dd></div>
+              </dl>
+              <div class="project-actions">
+                <a class="button button-primary" href="https://github.com/h1t3k/Standalone_Kali-Linux" target="_blank" rel="noopener" data-event="case_study_open">View repository</a>
+                <a class="button" href="field-notes.html#destructive-docs" data-event="case_study_open">Read the documentation note</a>
+              </div>
+            </article>
+          </li>
+        </ol>
+      </section>
 
-        <li>
-          <a class="post-item" href="https://github.com/h1t3k/Wazuh_MacOS-Debian13-agents" target="_blank" rel="noopener">
-            <div class="post-meta">security · monitoring · siem</div>
-            <h3>Wazuh Agents — macOS &amp; Debian 13</h3>
-            <p>Standing up a Wazuh server in VirtualBox with macOS as the host, then enrolling agents on the host and across guest VMs.</p>
-            <span class="tag">View repository →</span>
-          </a>
-        </li>
-
-        <li>
-          <a class="post-item" href="web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/">
-            <div class="post-meta">web3 · deployment · live</div>
-            <h3>Web3 Portfolio Deployment</h3>
-            <p>A decentralized publishing experiment using web3-hosted assets with HTTPS-readable access. Built to document the process of publishing a portfolio outside of a traditional web2-only stack.</p>
-            <span class="tag">Open web3 route →</span>
-          </a>
-        </li>
-
-        <li>
-          <article class="post-item" style="cursor:default">
-            <div class="post-meta">automation · agents · r&amp;d</div>
-            <h3>Agentic Automation Systems</h3>
-            <p>Research and development toward local-first automation workflows, agent-assisted documentation, repeatable deployment scripts, and operational reporting.</p>
-            <span class="tag">R&amp;D track</span>
+      <section class="fullrow supporting-work" aria-labelledby="supporting-title">
+        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>ls technical-notes/</div>
+        <h2 id="supporting-title">Supporting technical notes</h2>
+        <div class="supporting-grid">
+          <article>
+            <h3>Bare-metal virtualized</h3>
+            <p>External raw-disk storage for VirtualBox on macOS, documented with SIP and host-isolation risks.</p>
+            <a class="text-link" href="https://github.com/h1t3k/Bare-Metal_Virtualized" target="_blank" rel="noopener" data-event="case_study_open">View repository →</a>
           </article>
-        </li>
-
-        <li>
-          <a class="post-item" href="security-lab.html">
-            <div class="post-meta">security · monitoring · lab</div>
-            <h3>Security Monitoring Lab</h3>
-            <p>Infrastructure security notes, monitoring experiments, endpoint visibility, Linux system hardening, and practical cybersecurity learning.</p>
-            <span class="tag">View lab notes →</span>
-          </a>
-        </li>
-
-        <li>
-          <a class="post-item" href="design-archive.html">
-            <div class="post-meta">ipfs · visual · archive</div>
-            <h3>IPFS Visual Archive</h3>
-            <p>A gallery of image-based creative work and visual assets hosted through decentralized storage.</p>
-            <span class="tag">View archive →</span>
-          </a>
-        </li>
-
-      </ul>
-      </div>
-    </section>
+          <article>
+            <h3>Debian Realtek driver update</h3>
+            <p>Kernel headers, build dependencies, and 88x2bu driver installation notes for Debian.</p>
+            <a class="text-link" href="https://github.com/h1t3k/Debian-kernel_realtek-driver_update" target="_blank" rel="noopener" data-event="case_study_open">View repository →</a>
+          </article>
+          <article>
+            <h3>Security evidence map</h3>
+            <p>A concise index connecting public repositories to visibility, least-privilege, recovery, and safe-documentation questions.</p>
+            <a class="text-link" href="security-lab.html" data-event="case_study_open">Open Security Lab →</a>
+          </article>
+          <article>
+            <h3>Type &amp; design archive</h3>
+            <p>Live bundled-font specimens and an IPFS-backed image archive with provenance limits stated in the interface.</p>
+            <a class="text-link" href="design-archive.html" data-event="case_study_open">Open the archive →</a>
+          </article>
+        </div>
+      </section>
+    </main>
 
     <footer class="center small fullrow">
-      <p>© 2026 k.b.r.<br><span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">visits: …</span></p>
+      <p>© 2026 k.b.r. <span class="footer-sep" aria-hidden="true">·</span> <span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">aggregate visits: …</span></p>
     </footer>
-
   </div>
   <script defer src="assets/js/init.js"></script>
 </body>
