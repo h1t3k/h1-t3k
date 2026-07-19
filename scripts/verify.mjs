@@ -84,9 +84,9 @@ for (const path of htmlFiles) {
   for (const asset of [
     "assets/js/routes.js?v=3.2",
     "assets/js/boot-gate.js?v=3.2",
-    "styles/main.css?v=3.4",
-    "assets/js/boot.js?v=3.2",
-    "assets/js/init.js?v=3.2"
+    "styles/main.css?v=3.6",
+    "assets/js/boot.js?v=3.4",
+    "assets/js/init.js?v=3.3"
   ]) {
     check(html.includes(asset), `${path}: release asset version is coherent (${asset})`);
   }
@@ -158,6 +158,10 @@ const initJs = read("assets/js/init.js");
 const bootJs = read("assets/js/boot.js");
 const bootGateJs = read("assets/js/boot-gate.js");
 const routesJs = read("assets/js/routes.js");
+const mainCss = read("styles/main.css");
+const compactBoot = bootJs.match(
+  /function showCompact\([\s\S]*?(?=\n  function resetAfterPageShow)/
+)?.[0] || "";
 for (const [name, source] of [
   ["init.js", initJs],
   ["boot.js", bootJs],
@@ -177,6 +181,10 @@ for (const eventName of site.analytics.allowed_conversion_events) {
   check(initJs.includes(`"${eventName}"`), `conversion event is implemented (${eventName})`);
 }
 check(bootJs.includes("FAILED_SAFE") && bootJs.includes("SKIPPED") && bootJs.includes("COMPLETE"), "boot terminal states implemented");
+check(compactBoot.includes('skip.textContent = "tap anywhere to continue"'), "compact boot restores the unboxed tap-anywhere prompt");
+check(!compactBoot.includes("$ route ........"), "compact boot removes the duplicate route header");
+check(compactBoot.includes('boot.addEventListener("pointerdown", continueNow)'), "compact boot accepts a pointer anywhere");
+check(mainCss.includes(".is-compact .boot-route-name{display:none}"), "compact destination header is visually removed");
 for (const eventName of site.analytics.allowed_boot_events) {
   check(
     bootGateJs.includes(`"${eventName}"`) || bootJs.includes(`"${eventName}"`),
@@ -216,6 +224,33 @@ check(
   "dollar-prefixed page eyebrows are removed"
 );
 check(occurrences(read("projects.html"), /<dt>Contribution boundary<\/dt>/g) === 4, "selected projects state contribution boundaries");
+check(
+  htmlFiles.reduce((count, path) =>
+    count + occurrences(read(path), /class="(?:hero-lede )?responsive-intro"/g), 0
+  ) === 5,
+  "responsive intro cap is scoped to the five owner-named pages"
+);
+check(
+  mainCss.includes("--bounded-copy:clamp(16px,calc(12px + .833333vw),18px)") &&
+    mainCss.includes("--bounded-card-heading:clamp(24px,calc(18px + 1.25vw),27px)") &&
+    mainCss.includes("--bounded-heading:clamp(32px,calc(24px + 1.666667vw),36px)"),
+  "requested content type uses a uniform 9:8 bounded scale"
+);
+check(
+  mainCss.includes(".practice-card h3{font-size:var(--bounded-card-heading)}") &&
+    mainCss.includes(".supporting-grid p{color:var(--muted);font-size:var(--bounded-copy)}"),
+  "selected work, working range, and supporting-note cells share the bounded type scale"
+);
+check(
+  mainCss.includes("grid-template-columns:repeat(auto-fill,138px)"),
+  "visual archive keeps compact deterministic thumbnail tracks"
+);
+check(
+  occurrences(archiveHtml, /data-specimen-size/g) === 3 &&
+    initJs.includes("renderSizeLabels") &&
+    initJs.includes("getComputedStyle(sample).fontSize"),
+  "all live specimen cards expose deterministic font-size readouts"
+);
 
 const robots = read("robots.txt");
 for (const agent of [

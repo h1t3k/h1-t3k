@@ -337,9 +337,31 @@
     const input = document.getElementById("specimen-input");
     const reset = document.querySelector("[data-specimen-reset]");
     const outputs = [...document.querySelectorAll("[data-specimen-output]")];
+    const sizeLabels = [...document.querySelectorAll("[data-specimen-size]")];
     if (!input || !reset || !outputs.length) return;
 
     const pangram = "Sphinx of black quartz, judge my vow.";
+    let sizeFrame = 0;
+
+    function renderSizeLabels() {
+      sizeFrame = 0;
+      sizeLabels.forEach(function (label) {
+        const sample = label.closest(".type-card")?.querySelector(".type-sample");
+        const pixels = Number.parseFloat(sample ? getComputedStyle(sample).fontSize : "");
+        if (!Number.isFinite(pixels)) {
+          label.textContent = "—";
+          return;
+        }
+        const rounded = Math.round(pixels * 10) / 10;
+        label.textContent = rounded.toFixed(Number.isInteger(rounded) ? 0 : 1) + " px";
+      });
+    }
+
+    function queueSizeLabels() {
+      if (sizeFrame) return;
+      sizeFrame = window.requestAnimationFrame(renderSizeLabels);
+    }
+
     function render() {
       const value = input.value.slice(0, 120);
       outputs.forEach(function (output) {
@@ -353,7 +375,9 @@
       render();
       input.focus();
     });
+    window.addEventListener("resize", queueSizeLabels, { passive: true });
     render();
+    renderSizeLabels();
   }
 
   function setupCoarseEvents() {

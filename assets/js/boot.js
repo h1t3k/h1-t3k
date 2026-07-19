@@ -228,25 +228,24 @@
     window.clearTimeout(compactTimer);
     compactRowTimers.forEach(window.clearTimeout);
     compactRowTimers = [];
-    if (compactContinue) skip.removeEventListener("click", compactContinue);
+    if (compactContinue) {
+      skip.removeEventListener("click", compactContinue);
+      boot.removeEventListener("pointerdown", compactContinue);
+    }
     compactNavigate = navigate;
     clearStage();
     boot.classList.add("is-compact");
     if (reduced) boot.classList.add("is-static");
-    routeName.textContent = route.name;
-    skip.textContent = "Continue now";
+    skip.textContent = "tap anywhere to continue";
     html.classList.add("transitioning");
-    boot.setAttribute("aria-label", "Opening " + route.name);
-    skip.focus({ preventScroll: true });
+    boot.setAttribute("aria-label", "Opening " + route.name + ". Tap anywhere to continue.");
 
-    const lines = [
-      "$ route ........ " + route.name.toLowerCase()
-    ].concat(route.details.slice(0, 3).map(function (detail) {
+    const lines = route.details.slice(0, 3).map(function (detail) {
       return "$ " + detail;
-    }));
+    });
 
     lines.forEach(function (text, index) {
-      const item = row(text, { heading: index === 0, ok: index > 0 });
+      const item = row(text, { ok: true });
       if (reduced) {
         item.element.classList.add("on");
         if (item.ok) item.ok.classList.add("on");
@@ -266,6 +265,7 @@
       compactRowTimers.forEach(window.clearTimeout);
       compactRowTimers = [];
       skip.removeEventListener("click", continueNow);
+      boot.removeEventListener("pointerdown", continueNow);
       compactContinue = null;
       emit("compact_transition_completed", {
         route: route.id,
@@ -276,6 +276,7 @@
 
     compactContinue = continueNow;
     skip.addEventListener("click", continueNow);
+    boot.addEventListener("pointerdown", continueNow);
     emit("compact_transition_started", {
       route: route.id,
       reduced: reduced
@@ -291,7 +292,10 @@
     compactRowTimers.forEach(window.clearTimeout);
     compactRowTimers = [];
     compactNavigate = null;
-    if (compactContinue && skip) skip.removeEventListener("click", compactContinue);
+    if (compactContinue && skip) {
+      skip.removeEventListener("click", compactContinue);
+      if (boot) boot.removeEventListener("pointerdown", compactContinue);
+    }
     compactContinue = null;
     html.classList.remove("transitioning");
     if (boot) {

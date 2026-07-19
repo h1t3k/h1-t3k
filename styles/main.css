@@ -108,6 +108,11 @@
   --step-2:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
   --step-3:clamp(2rem,1.35rem + 2.6vw,3.5rem);
   --step-hero:clamp(2.75rem,6vw,5.5rem);
+  --bounded-copy:clamp(16px,calc(12px + .833333vw),18px);
+  --bounded-intro:clamp(18px,calc(13.5px + .9375vw),20.25px);
+  --bounded-meta:clamp(14px,calc(10.5px + .729167vw),15.75px);
+  --bounded-card-heading:clamp(24px,calc(18px + 1.25vw),27px);
+  --bounded-heading:clamp(32px,calc(24px + 1.666667vw),36px);
   --wrap:1120px;
   --gutter:clamp(1rem,.75rem + 1vw,2rem);
   --page-inline-start:max(1rem,env(safe-area-inset-left));
@@ -450,6 +455,8 @@ nav{
   line-height:1.7;
 }
 .home-hero .hero-lede{max-width:74ch}
+.hero-lede.responsive-intro,
+.page-intro>p.responsive-intro:last-child{font-size:var(--bounded-intro)}
 .role-title{display:block;margin-bottom:.35rem;color:var(--text);font-family:var(--display);font-style:normal}
 .hero-actions,
 .project-actions,
@@ -527,6 +534,23 @@ nav{
   max-width:68ch;
   color:var(--muted);
 }
+#intro-title,
+#selected-title,
+#practice-title,
+#architecture-title,
+#background-title,
+#contact-title,
+#supporting-title,
+#archive-title{
+  font-size:var(--bounded-heading);
+}
+#intro-title~p,
+#architecture-title~p,
+#architecture-title~.fact-list,
+#background-title+p,
+#contact-title+p{
+  font-size:var(--bounded-copy);
+}
 .evidence-grid,
 .practice-grid,
 .supporting-grid{
@@ -566,6 +590,10 @@ nav{
   margin:0;
   color:var(--muted);
 }
+.evidence-card h3,
+.practice-card h3{font-size:var(--bounded-card-heading)}
+.evidence-card p,
+.practice-card p{font-size:var(--bounded-copy)}
 .card-index,
 .practice-index,
 .post-meta{
@@ -574,6 +602,9 @@ nav{
   letter-spacing:.09em;
   text-transform:uppercase;
 }
+.evidence-card .card-index,
+.practice-card .practice-index,
+.evidence-card .tag{font-size:var(--bounded-meta)}
 .tag{
   display:inline-block;
   padding:.25rem .45rem;
@@ -709,10 +740,11 @@ nav{
 }
 .supporting-grid h3{
   color:var(--green);
-  font-size:var(--step-1);
+  font-size:var(--bounded-intro);
   text-transform:uppercase;
 }
-.supporting-grid p{color:var(--muted)}
+.supporting-grid p{color:var(--muted);font-size:var(--bounded-copy)}
+.supporting-grid .text-link{font-size:var(--bounded-copy)}
 
 @media (min-width:920px){
   .project-flow-layout{grid-template-columns:minmax(12rem,15rem) minmax(0,1fr);gap:clamp(2rem,5vw,4rem)}
@@ -821,7 +853,7 @@ nav{
 }
 .type-meta{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:1rem;
   margin-bottom:2rem;
   padding-bottom:1rem;
@@ -835,6 +867,7 @@ nav{
   text-transform:uppercase;
 }
 .type-meta strong{color:var(--muted);font-size:var(--step--1)}
+.type-meta [data-specimen-size]{font-variant-numeric:tabular-nums}
 .type-sample{
   margin:0;
   color:var(--text);
@@ -864,7 +897,8 @@ nav{
 }
 .gallery{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(auto-fill,138px);
+  justify-content:start;
   gap:.75rem;
 }
 .gallery figure{
@@ -986,8 +1020,8 @@ html.boot-done body>.wrap{visibility:visible}
   font-size:var(--step--1);
   line-height:1.8;
 }
-.is-compact .boot-route-name{opacity:1}
-.is-compact .boot-log{top:max(7.5rem,calc(env(safe-area-inset-top) + 7.5rem))}
+.is-compact{cursor:pointer}
+.is-compact .boot-route-name{display:none}
 .is-compact .mono-stage{display:none}
 .is-static .boot-log{opacity:1}
 .boot-log.wipe{opacity:0;transition:opacity .12s linear}
@@ -1053,6 +1087,20 @@ html.boot-done body>.wrap{visibility:visible}
   cursor:pointer;
 }
 .skip-hint:hover{color:var(--green);border-color:var(--green)}
+.is-compact .skip-hint{
+  min-height:44px;
+  padding:.6rem .9rem;
+  border:0;
+  background:transparent;
+  color:var(--dim);
+  font-weight:400;
+  letter-spacing:.08em;
+  text-transform:lowercase;
+}
+.is-compact .skip-hint:hover{
+  border-color:transparent;
+  color:var(--green);
+}
 html.boot-done.did-boot .cascade{opacity:0;animation:fade-in .45s ease forwards}
 html.boot-done.did-boot .cascade-t1{animation-delay:0s}
 html.boot-done.did-boot .cascade-t2{animation-delay:.06s}
@@ -1072,7 +1120,6 @@ html.transition-arrival footer{animation:arrival-fade .12s ease both}
   .project-facts>div,
   .fact-list>div{grid-template-columns:minmax(0,1fr);gap:.25rem}
   .project-record{min-height:0}
-  .gallery{grid-template-columns:minmax(0,1fr)}
   .control-row{align-items:flex-start;flex-direction:column}
 }
 
