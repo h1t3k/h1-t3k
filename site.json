@@ -7,7 +7,7 @@
   "nav": [
     {
       "label": "Home",
-      "href": "/"
+      "href": "index.html"
     },
     {
       "label": "Projects",
@@ -53,7 +53,10 @@
       "case_study_open",
       "profile_visit",
       "resume_open",
-      "typeface_inquiry"
+      "typeface_inquiry",
+      "web3_direct_notice_shown",
+      "web3_direct_open_attempted",
+      "https_presentation_selected"
     ],
     "free_form_text_collection": false,
     "specimen_text_collection": false

@@ -15,22 +15,34 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Projects — Keaton Raser">
 <meta name="twitter:description" content="Selected evidence across on-chain publishing, Linux systems, and defensive monitoring.">
-<link rel="stylesheet" href="styles/main.css">
+<script src="assets/js/routes.js?v=3.2"></script>
+<script src="assets/js/boot-gate.js?v=3.2"></script>
+<link rel="stylesheet" href="styles/main.css?v=3.2">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
+  <div id="boot" role="group" aria-label="H1-T3K presentation">
+    <div class="boot-route-name" id="bootRouteName" aria-hidden="true"></div>
+    <div class="boot-log" id="bootLog" aria-hidden="true"></div>
+    <div class="mono-stage" id="monoStage">
+      <div class="monogram" id="monogram">ht<span class="sweep" id="sweep"></span></div>
+    </div>
+    <button class="skip-hint" id="bootSkip" type="button">Skip presentation</button>
+  </div>
   <div class="wrap grid">
     <nav aria-label="Primary">
-      <a class="site-mono" href="/" aria-label="H1-T3K home">&oslash;</a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
-        <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
-      </button>
-      <div class="nav-links" id="site-menu">
-        <a href="/">Home</a>
-        <a href="projects.html" aria-current="page">Projects</a>
-        <a href="field-notes.html">Notes</a>
-        <a href="design-archive.html">Type &amp; Archive</a>
-        <a href="contact.html">Contact</a>
+      <div class="nav-row">
+        <a class="site-mono" href="index.html" aria-label="H1-T3K home">&oslash;</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+          <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
+        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html">Home</a>
+          <a href="projects.html" aria-current="page">Projects</a>
+          <a href="field-notes.html">Notes</a>
+          <a href="design-archive.html">Type &amp; Archive</a>
+          <a href="contact.html">Contact</a>
+        </div>
       </div>
     </nav>
 
@@ -42,14 +54,13 @@
 
       <section class="fullrow project-flow-layout" aria-labelledby="selected-projects">
         <header class="project-flow-rail">
-          <div class="sys-line" aria-hidden="true"><span class="prompt"></span>ls selected-work/</div>
           <h2 id="selected-projects">Selected evidence</h2>
           <p data-project-summary>Four project records. Scroll for constraints, decisions, status, and source links.</p>
         </header>
 
-        <ol class="project-flow" aria-label="Selected projects">
+        <ol class="project-flow" aria-label="Selected projects" data-depth-flow="projects">
           <li id="web3-portfolio">
-            <article class="project-record">
+            <article class="project-record" data-depth-item>
               <div class="post-meta">publishing systems · Arbitrum Nova · runtime verified</div>
               <h2>On-chain Web3 portfolio</h2>
               <p class="project-summary">A contract-backed static portfolio presented to ordinary browsers through an HTTPS proxy or gateway.</p>
@@ -60,7 +71,7 @@
                 <div><dt>Status</dt><dd>HTTPS and read-only contract retrieval are verified. Native Web3 browser parity and an exact deployed Git commit are not proven.</dd></div>
               </dl>
               <div class="project-actions">
-                <a class="button button-primary" href="https://h1-t3k.design/" data-event="case_study_open">Open HTTPS presentation</a>
+                <a class="button button-primary" href="index.html?presentation=full" data-presentation-replay data-transition="skip">Open HTTPS presentation</a>
                 <a class="button" href="web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/" data-event="case_study_open">Open direct Web3 route</a>
               </div>
               <p class="evidence-note"><strong>Runtime identifier:</strong> <code>web3://0xE7Deb835Ac84Cd241cda7121A75Abcc3deFA6470:42170/</code></p>
@@ -68,7 +79,7 @@
           </li>
 
           <li id="aquarian">
-            <article class="project-record">
+            <article class="project-record" data-depth-item>
               <div class="post-meta">Linux · interaction · recovery-aware</div>
               <h2>Aquarian terminal screensaver</h2>
               <p class="project-summary">Aquarian is an intentionally named Debian/Linux terminal aquarium that replaces part of the login or lock flow without treating recovery as an afterthought.</p>
@@ -86,7 +97,7 @@
           </li>
 
           <li id="wazuh">
-            <article class="project-record">
+            <article class="project-record" data-depth-item>
               <div class="post-meta">defensive monitoring · virtualization · agents</div>
               <h2>Wazuh lab topology</h2>
               <p class="project-summary">A Wazuh 4.14.4 OVA in VirtualBox on macOS, with agent enrollment documented for the host and Debian guests.</p>
@@ -104,7 +115,7 @@
           </li>
 
           <li id="standalone-kali">
-            <article class="project-record">
+            <article class="project-record" data-depth-item>
               <div class="post-meta">Linux · encrypted storage · destructive procedure</div>
               <h2>Standalone Kali Linux</h2>
               <p class="project-summary">A detailed installation path for an encrypted Kali system on an external drive, with BTRFS, LUKS, and bootloader steps.</p>
@@ -124,7 +135,6 @@
       </section>
 
       <section class="fullrow supporting-work" aria-labelledby="supporting-title">
-        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>ls technical-notes/</div>
         <h2 id="supporting-title">Supporting technical notes</h2>
         <div class="supporting-grid">
           <article>
@@ -155,6 +165,7 @@
       <p>© 2026 k.b.r. <span class="footer-sep" aria-hidden="true">·</span> <span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">aggregate visits: …</span></p>
     </footer>
   </div>
-  <script defer src="assets/js/init.js"></script>
+  <script defer src="assets/js/boot.js?v=3.2"></script>
+  <script defer src="assets/js/init.js?v=3.2"></script>
 </body>
 </html>

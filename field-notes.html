@@ -15,22 +15,34 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Notes — Keaton Raser">
 <meta name="twitter:description" content="Repository-backed notes on Linux systems, defensive monitoring, and repeatable technical documentation.">
-<link rel="stylesheet" href="styles/main.css">
+<script src="assets/js/routes.js?v=3.2"></script>
+<script src="assets/js/boot-gate.js?v=3.2"></script>
+<link rel="stylesheet" href="styles/main.css?v=3.2">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
+  <div id="boot" role="group" aria-label="H1-T3K presentation">
+    <div class="boot-route-name" id="bootRouteName" aria-hidden="true"></div>
+    <div class="boot-log" id="bootLog" aria-hidden="true"></div>
+    <div class="mono-stage" id="monoStage">
+      <div class="monogram" id="monogram">ht<span class="sweep" id="sweep"></span></div>
+    </div>
+    <button class="skip-hint" id="bootSkip" type="button">Skip presentation</button>
+  </div>
   <div class="wrap grid">
     <nav aria-label="Primary">
-      <a class="site-mono" href="/" aria-label="H1-T3K home">&oslash;</a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
-        <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
-      </button>
-      <div class="nav-links" id="site-menu">
-        <a href="/">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="field-notes.html" aria-current="page">Notes</a>
-        <a href="design-archive.html">Type &amp; Archive</a>
-        <a href="contact.html">Contact</a>
+      <div class="nav-row">
+        <a class="site-mono" href="index.html" aria-label="H1-T3K home">&oslash;</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+          <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
+        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html">Home</a>
+          <a href="projects.html">Projects</a>
+          <a href="field-notes.html" aria-current="page">Notes</a>
+          <a href="design-archive.html">Type &amp; Archive</a>
+          <a href="contact.html">Contact</a>
+        </div>
       </div>
     </nav>
 
@@ -41,7 +53,6 @@
       </header>
 
       <section class="fullrow notes-list" aria-labelledby="notes-title">
-        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>ls -t notes/</div>
         <h2 id="notes-title">Evidence before claims</h2>
 
         <article class="note-record" id="aquarian-note">
@@ -88,6 +99,7 @@
       <p>© 2026 k.b.r. <span class="footer-sep" aria-hidden="true">·</span> <span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">aggregate visits: …</span></p>
     </footer>
   </div>
-  <script defer src="assets/js/init.js"></script>
+  <script defer src="assets/js/boot.js?v=3.2"></script>
+  <script defer src="assets/js/init.js?v=3.2"></script>
 </body>
 </html>

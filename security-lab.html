@@ -15,22 +15,34 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Security Lab — Keaton Raser">
 <meta name="twitter:description" content="Public security evidence organized around visibility, least privilege, recovery, and safe documentation.">
-<link rel="stylesheet" href="styles/main.css">
+<script src="assets/js/routes.js?v=3.2"></script>
+<script src="assets/js/boot-gate.js?v=3.2"></script>
+<link rel="stylesheet" href="styles/main.css?v=3.2">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
+  <div id="boot" role="group" aria-label="H1-T3K presentation">
+    <div class="boot-route-name" id="bootRouteName" aria-hidden="true"></div>
+    <div class="boot-log" id="bootLog" aria-hidden="true"></div>
+    <div class="mono-stage" id="monoStage">
+      <div class="monogram" id="monogram">ht<span class="sweep" id="sweep"></span></div>
+    </div>
+    <button class="skip-hint" id="bootSkip" type="button">Skip presentation</button>
+  </div>
   <div class="wrap grid">
     <nav aria-label="Primary">
-      <a class="site-mono" href="/" aria-label="H1-T3K home">&oslash;</a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
-        <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
-      </button>
-      <div class="nav-links" id="site-menu">
-        <a href="/">Home</a>
-        <a href="projects.html" class="current-section">Projects</a>
-        <a href="field-notes.html">Notes</a>
-        <a href="design-archive.html">Type &amp; Archive</a>
-        <a href="contact.html">Contact</a>
+      <div class="nav-row">
+        <a class="site-mono" href="index.html" aria-label="H1-T3K home">&oslash;</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+          <span data-menu-label>Menu</span><span class="nav-toggle-mark" aria-hidden="true"></span>
+        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html">Home</a>
+          <a href="projects.html" class="current-section">Projects</a>
+          <a href="field-notes.html">Notes</a>
+          <a href="design-archive.html">Type &amp; Archive</a>
+          <a href="contact.html">Contact</a>
+        </div>
       </div>
     </nav>
 
@@ -42,7 +54,6 @@
       </header>
 
       <section class="fullrow" aria-labelledby="questions-title">
-        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>cat review-questions.txt</div>
         <h2 id="questions-title">Four review questions</h2>
         <ul class="scope-list">
           <li><strong>Visibility</strong><span>Which logs, events, and system signals support a useful investigation?</span></li>
@@ -53,7 +64,6 @@
       </section>
 
       <section class="fullrow evidence-map" aria-labelledby="evidence-title">
-        <div class="sys-line" aria-hidden="true"><span class="prompt"></span>ls public-evidence/</div>
         <h2 id="evidence-title">Repository evidence map</h2>
 
         <article id="wazuh-evidence">
@@ -96,6 +106,7 @@
       <p>© 2026 k.b.r. <span class="footer-sep" aria-hidden="true">·</span> <span id="visitor-counter" data-state="loading" role="status" aria-live="polite" aria-atomic="true">aggregate visits: …</span></p>
     </footer>
   </div>
-  <script defer src="assets/js/init.js"></script>
+  <script defer src="assets/js/boot.js?v=3.2"></script>
+  <script defer src="assets/js/init.js?v=3.2"></script>
 </body>
 </html>
