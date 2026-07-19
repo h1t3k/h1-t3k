@@ -643,8 +643,13 @@ nav{
 }
 .project-flow>li{
   counter-increment:project;
-  position:relative;
+  position:sticky;
+  top:calc(env(safe-area-inset-top) + var(--nav-row-height) + 1.25rem);
 }
+.project-flow>li:nth-child(1){z-index:1}
+.project-flow>li:nth-child(2){z-index:2}
+.project-flow>li:nth-child(3){z-index:3}
+.project-flow>li:nth-child(4){z-index:4}
 .project-record{
   position:relative;
   min-height:clamp(300px,65svh,640px);
@@ -749,11 +754,6 @@ nav{
 @media (min-width:920px){
   .project-flow-layout{grid-template-columns:minmax(12rem,15rem) minmax(0,1fr);gap:clamp(2rem,5vw,4rem)}
   .project-flow-rail{position:sticky;top:calc(var(--nav-row-height) + 2rem);align-self:start}
-  .project-flow>li{position:sticky;top:calc(var(--nav-row-height) + 1.25rem)}
-  .project-flow>li:nth-child(1){z-index:1}
-  .project-flow>li:nth-child(2){z-index:2}
-  .project-flow>li:nth-child(3){z-index:3}
-  .project-flow>li:nth-child(4){z-index:4}
 }
 .motion-ready [data-depth-item]{
   opacity:.5;

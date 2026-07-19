@@ -84,7 +84,7 @@ for (const path of htmlFiles) {
   for (const asset of [
     "assets/js/routes.js?v=3.2",
     "assets/js/boot-gate.js?v=3.2",
-    "styles/main.css?v=3.6",
+    "styles/main.css?v=3.7",
     "assets/js/boot.js?v=3.4",
     "assets/js/init.js?v=3.3"
   ]) {
@@ -217,6 +217,18 @@ check(
   !read("field-notes.html").includes("data-depth-flow") &&
     !read("design-archive.html").includes("data-depth-flow"),
   "Notes and Type & Archive remain free of parallax"
+);
+const projectFlowItemRule = mainCss.match(/\.project-flow>li\{([\s\S]*?)\}/)?.[1] || "";
+const projectFlowDesktopBreakpoint = mainCss.indexOf("@media (min-width:920px)");
+check(
+  projectFlowItemRule.includes("position:sticky") &&
+    projectFlowItemRule.includes("env(safe-area-inset-top)") &&
+    mainCss.indexOf(".project-flow>li:nth-child(1)") < projectFlowDesktopBreakpoint,
+  "Projects sticky depth flow remains enabled below the desktop breakpoint"
+);
+check(
+  /@media \(prefers-reduced-motion:reduce\)\{[\s\S]*?\.project-flow>li\{position:relative;top:auto\}/.test(mainCss),
+  "Projects depth flow retains a static reduced-motion fallback"
 );
 check(
   !htmlFiles.some((path) => /class="sys-line"|class="prompt"/.test(read(path))) &&

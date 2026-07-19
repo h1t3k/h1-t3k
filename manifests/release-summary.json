@@ -7,13 +7,13 @@
   },
   "candidate": {
     "file_count": 27,
-    "content_bytes": 288342,
+    "content_bytes": 288326,
     "manifest_bytes": 2460,
-    "manifest_sha256": "eda96a9be87c16109ad7e4150f10f778de53965d3dc3aface54d17f62a7f2d86"
+    "manifest_sha256": "d1c7ac551a7c49e1067e808b3f3ef05172ba1e1194f4885bdda40ea2e52f37bc"
   },
   "delta": {
     "file_count": -1,
-    "content_bytes": -43787
+    "content_bytes": -43803
   },
   "authorization": "github-pages preview only",
   "github_pages_preview_authorized": true,
