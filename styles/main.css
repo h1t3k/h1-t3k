@@ -169,6 +169,7 @@ body::after{
 
 ::selection{background:var(--green);color:#071008}
 :focus-visible{outline:2px dashed var(--green);outline-offset:4px}
+main[tabindex="-1"]:focus{outline:none}
 
 a{color:var(--green);text-decoration-thickness:1px;text-underline-offset:.18em}
 a:hover{text-decoration:underline}
