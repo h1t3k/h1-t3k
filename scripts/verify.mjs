@@ -84,7 +84,7 @@ for (const path of htmlFiles) {
   for (const asset of [
     "assets/js/routes.js?v=3.2",
     "assets/js/boot-gate.js?v=3.2",
-    "styles/main.css?v=3.3",
+    "styles/main.css?v=3.4",
     "assets/js/boot.js?v=3.2",
     "assets/js/init.js?v=3.2"
   ]) {
